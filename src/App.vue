@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { invoke } from "@tauri-apps/api/core";
-import { open } from "@tauri-apps/plugin-dialog";
 import { useStepper } from "./composables/useStepper";
+import Stepper from "./components/Stepper.vue";
+import ConfigureScan from "./components/configure-scan/ConfigureScan.vue";
 
 interface FilePIIs {
   filename: string;
@@ -19,9 +20,8 @@ const hasScanned = ref(false);
 const steps = [{ label: "Configure" }, { label: "Scan" }, { label: "Results" }];
 const stepper = useStepper(steps);
 
-async function scan(directory: boolean) {
-  const selected = await open({ directory, multiple: false });
-  if (!selected || Array.isArray(selected)) return;
+async function scan(paths: string[]) {
+  if (paths.length === 0) return;
 
   error.value = "";
   scanning.value = true;
@@ -30,7 +30,10 @@ async function scan(directory: boolean) {
   stepper.goTo(1);
 
   try {
-    results.value = await invoke<FilePIIs[]>("scan_path", { path: selected });
+    const scanned = await Promise.all(
+      paths.map((path) => invoke<FilePIIs[]>("scan_path", { path })),
+    );
+    results.value = scanned.flat();
   } catch (e) {
     error.value = String(e);
   } finally {
@@ -60,27 +63,15 @@ function hasFindings(file: FilePIIs) {
       Everything runs locally — nothing leaves your computer.
     </p>
 
-    <div class="flex justify-center gap-3">
-      <button
-        :disabled="scanning"
-        class="cursor-pointer rounded-lg border border-transparent bg-white px-5 py-2.5 font-medium text-neutral-900 shadow-sm transition-colors outline-none hover:border-blue-500 active:border-blue-500 active:bg-neutral-200 disabled:cursor-default disabled:opacity-60 dark:bg-neutral-900/60 dark:text-white dark:active:bg-black/40"
-        @click="scan(false)"
-      >
-        Scan File…
-      </button>
-      <button
-        :disabled="scanning"
-        class="cursor-pointer rounded-lg border border-transparent bg-white px-5 py-2.5 font-medium text-neutral-900 shadow-sm transition-colors outline-none hover:border-blue-500 active:border-blue-500 active:bg-neutral-200 disabled:cursor-default disabled:opacity-60 dark:bg-neutral-900/60 dark:text-white dark:active:bg-black/40"
-        @click="scan(true)"
-      >
-        Scan Folder…
-      </button>
-    </div>
+    <div class="mx-auto w-full max-w-4xl">
+      <ConfigureScan :disabled="scanning" @start-scan="scan" />
 
-    <p v-if="scanning" class="mt-6">Scanning…</p>
-    <p v-else-if="error" class="mt-6 text-red-600 dark:text-red-400">{{ error }}</p>
+      <p v-if="scanning" class="mt-6 text-center">Scanning…</p>
+      <p v-else-if="error" class="mt-6 text-center text-red-600 dark:text-red-400">
+        {{ error }}
+      </p>
 
-    <ul v-else-if="hasScanned" class="mx-auto mt-8 max-w-xl space-y-3 text-left">
+      <ul v-else-if="hasScanned" class="mt-8 space-y-3 text-left">
       <li v-if="results.length === 0" class="text-neutral-500 dark:text-neutral-400">
         No files found.
       </li>
@@ -114,5 +105,6 @@ function hasFindings(file: FilePIIs) {
         <div v-else class="text-sm text-green-600 dark:text-green-400">No PII detected</div>
       </li>
     </ul>
+    </div>
   </main>
 </template>
