@@ -1,53 +1,17 @@
 <script setup lang="ts">
-import { ref } from "vue";
-import { invoke } from "@tauri-apps/api/core";
 import { useStepper } from "./composables/useStepper";
+import { useScan } from "./composables/useScan";
 import Stepper from "./components/Stepper.vue";
 import ConfigureScan from "./components/configure-scan/ConfigureScan.vue";
 
-interface FilePIIs {
-  filename: string;
-  email_accounts: string[];
-  phone_numbers: string[];
-  other_piis: string[];
-}
-
-const results = ref<FilePIIs[]>([]);
-const scanning = ref(false);
-const error = ref("");
-const hasScanned = ref(false);
-
 const steps = [{ label: "Configure" }, { label: "Scan" }, { label: "Results" }];
 const stepper = useStepper(steps);
+const { results, scanning, error, hasScanned, scan, hasFindings } = useScan();
 
-async function scan(paths: string[]) {
-  if (paths.length === 0) return;
-
-  error.value = "";
-  scanning.value = true;
-  hasScanned.value = true;
-  results.value = [];
+async function startScan(paths: string[]) {
   stepper.goTo(1);
-
-  try {
-    const scanned = await Promise.all(
-      paths.map((path) => invoke<FilePIIs[]>("scan_path", { path })),
-    );
-    results.value = scanned.flat();
-  } catch (e) {
-    error.value = String(e);
-  } finally {
-    scanning.value = false;
-    stepper.goTo(2);
-  }
-}
-
-function hasFindings(file: FilePIIs) {
-  return (
-    file.email_accounts.length > 0 ||
-    file.phone_numbers.length > 0 ||
-    file.other_piis.length > 0
-  );
+  await scan(paths);
+  stepper.goTo(2);
 }
 </script>
 
@@ -64,7 +28,7 @@ function hasFindings(file: FilePIIs) {
     </p>
 
     <div class="mx-auto w-full max-w-4xl">
-      <ConfigureScan :disabled="scanning" @start-scan="scan" />
+      <ConfigureScan :disabled="scanning" @start-scan="startScan" />
 
       <p v-if="scanning" class="mt-6 text-center">Scanning…</p>
       <p v-else-if="error" class="mt-6 text-center text-red-600 dark:text-red-400">
