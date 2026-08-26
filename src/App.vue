@@ -2,6 +2,7 @@
 import { ref } from "vue";
 import { invoke } from "@tauri-apps/api/core";
 import { open } from "@tauri-apps/plugin-dialog";
+import { useStepper } from "./composables/useStepper";
 
 interface FilePIIs {
   filename: string;
@@ -15,6 +16,9 @@ const scanning = ref(false);
 const error = ref("");
 const hasScanned = ref(false);
 
+const steps = [{ label: "Configure" }, { label: "Scan" }, { label: "Results" }];
+const stepper = useStepper(steps);
+
 async function scan(directory: boolean) {
   const selected = await open({ directory, multiple: false });
   if (!selected || Array.isArray(selected)) return;
@@ -23,6 +27,7 @@ async function scan(directory: boolean) {
   scanning.value = true;
   hasScanned.value = true;
   results.value = [];
+  stepper.goTo(1);
 
   try {
     results.value = await invoke<FilePIIs[]>("scan_path", { path: selected });
@@ -30,6 +35,7 @@ async function scan(directory: boolean) {
     error.value = String(e);
   } finally {
     scanning.value = false;
+    stepper.goTo(2);
   }
 }
 
@@ -46,6 +52,8 @@ function hasFindings(file: FilePIIs) {
   <main
     class="flex min-h-screen flex-col items-center bg-neutral-100 px-4 pt-[8vh] pb-8 text-center font-sans text-neutral-900 dark:bg-neutral-800 dark:text-neutral-100"
   >
+    <Stepper class="mb-6 w-full" :steps="steps" :state-of="stepper.stateOf" />
+
     <h1 class="text-2xl font-bold">Akhtabooti</h1>
     <p class="mx-auto mt-2 mb-6 max-w-md text-neutral-500 dark:text-neutral-400">
       Scan a file or folder on this device for personal information (PII).
