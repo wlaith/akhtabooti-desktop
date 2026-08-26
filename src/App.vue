@@ -3,10 +3,11 @@ import { useStepper } from "./composables/useStepper";
 import { useScan } from "./composables/useScan";
 import Stepper from "./components/Stepper.vue";
 import ConfigureScan from "./components/configure-scan/ConfigureScan.vue";
+import ScanResults from "./components/scan-results/ScanResults.vue";
 
 const steps = [{ label: "Configure" }, { label: "Scan" }, { label: "Results" }];
 const stepper = useStepper(steps);
-const { results, scanning, error, hasScanned, scan, hasFindings } = useScan();
+const { results, scanning, error, hasScanned, scan } = useScan();
 
 async function startScan(paths: string[]) {
   stepper.goTo(1);
@@ -35,40 +36,7 @@ async function startScan(paths: string[]) {
         {{ error }}
       </p>
 
-      <ul v-else-if="hasScanned" class="mt-8 space-y-3 text-left">
-      <li v-if="results.length === 0" class="text-neutral-500 dark:text-neutral-400">
-        No files found.
-      </li>
-      <li
-        v-for="file in results"
-        :key="file.filename"
-        class="rounded-lg border border-neutral-200 bg-white p-4 dark:border-neutral-600 dark:bg-neutral-700"
-      >
-        <div class="mb-2 font-semibold break-all">{{ file.filename }}</div>
-        <div v-if="hasFindings(file)" class="flex flex-wrap gap-2">
-          <span
-            v-if="file.email_accounts.length"
-            class="rounded-full bg-red-100 px-3 py-0.5 text-sm text-red-800 dark:bg-red-900/40 dark:text-red-300"
-          >
-            {{ file.email_accounts.length }} email{{ file.email_accounts.length > 1 ? "s" : "" }}
-          </span>
-          <span
-            v-if="file.phone_numbers.length"
-            class="rounded-full bg-red-100 px-3 py-0.5 text-sm text-red-800 dark:bg-red-900/40 dark:text-red-300"
-          >
-            {{ file.phone_numbers.length }} phone number{{ file.phone_numbers.length > 1 ? "s" : "" }}
-          </span>
-          <span
-            v-for="tag in file.other_piis"
-            :key="tag"
-            class="rounded-full bg-red-100 px-3 py-0.5 text-sm text-red-800 dark:bg-red-900/40 dark:text-red-300"
-          >
-            {{ tag }}
-          </span>
-        </div>
-        <div v-else class="text-sm text-green-600 dark:text-green-400">No PII detected</div>
-      </li>
-    </ul>
+      <ScanResults v-else-if="hasScanned" class="mt-8" :results="results" />
     </div>
   </main>
 </template>
