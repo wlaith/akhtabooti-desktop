@@ -3,11 +3,12 @@ import { useStepper } from "./composables/useStepper";
 import { useScan } from "./composables/useScan";
 import Stepper from "./components/Stepper.vue";
 import ConfigureScan from "./components/configure-scan/ConfigureScan.vue";
+import ScanProgress from "./components/scan-progress/ScanProgress.vue";
 import ScanResults from "./components/scan-results/ScanResults.vue";
 
 const steps = [{ label: "Configure" }, { label: "Scan" }, { label: "Results" }];
 const stepper = useStepper(steps);
-const { results, scanning, error, hasScanned, scan } = useScan();
+const { results, pathStatus, scanning, error, hasScanned, scan } = useScan();
 
 async function startScan(paths: string[]) {
   stepper.goTo(1);
@@ -22,21 +23,13 @@ async function startScan(paths: string[]) {
   >
     <Stepper class="mb-6 w-full" :steps="steps" :state-of="stepper.stateOf" />
 
-    <h1 class="text-2xl font-bold">Akhtabooti</h1>
-    <p class="mx-auto mt-2 mb-6 max-w-md text-neutral-500 dark:text-neutral-400">
-      Scan a file or folder on this device for personal information (PII).
-      Everything runs locally — nothing leaves your computer.
-    </p>
-
     <div class="mx-auto w-full max-w-4xl">
-      <ConfigureScan :disabled="scanning" @start-scan="startScan" />
-
-      <p v-if="scanning" class="mt-6 text-center">Scanning…</p>
+      <ConfigureScan v-if="!scanning && !hasScanned" @start-scan="startScan" />
+      <ScanProgress v-else-if="scanning" :path-status="pathStatus" />
       <p v-else-if="error" class="mt-6 text-center text-red-600 dark:text-red-400">
         {{ error }}
       </p>
-
-      <ScanResults v-else-if="hasScanned" class="mt-8" :results="results" />
+      <ScanResults v-else-if="hasScanned" :results="results" />
     </div>
   </main>
 </template>
