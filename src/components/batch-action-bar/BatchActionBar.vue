@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import Tooltip from "../tooltip/Tooltip.vue";
+import Icon from "../icon/Icon.vue";
+
 defineProps<{ count: number }>();
 defineEmits<{
   (e: "redact"): void;
@@ -14,27 +17,36 @@ defineEmits<{
       {{ count }} selected
     </span>
     <div class="flex items-center">
-      <button
-        type="button"
-        class="cursor-pointer px-4 py-[15px] text-[14px] leading-[18px] tracking-[0.16px] hover:bg-white/10"
-        @click="$emit('redact')"
-      >
-        Redact
-      </button>
-      <button
-        type="button"
-        class="cursor-pointer px-4 py-[15px] text-[14px] leading-[18px] tracking-[0.16px] hover:bg-white/10"
-        @click="$emit('export')"
-      >
-        Export
-      </button>
-      <button
-        type="button"
-        class="cursor-pointer px-4 py-[15px] text-[14px] leading-[18px] tracking-[0.16px] hover:bg-white/10"
-        @click="$emit('quarantine')"
-      >
-        Quarantine
-      </button>
+      <Tooltip wrap text="Permanently remove the detected PII from the selected files">
+        <button
+          type="button"
+          class="flex cursor-pointer items-center gap-1 px-4 py-[15px] text-[14px] leading-[18px] tracking-[0.16px] hover:bg-white/10"
+          @click="$emit('redact')"
+        >
+          Redact
+          <Icon name="information" :size="12" />
+        </button>
+      </Tooltip>
+      <Tooltip wrap text="Download the selected files' findings as a report">
+        <button
+          type="button"
+          class="flex cursor-pointer items-center gap-1 px-4 py-[15px] text-[14px] leading-[18px] tracking-[0.16px] hover:bg-white/10"
+          @click="$emit('export')"
+        >
+          Export
+          <Icon name="information" :size="12" />
+        </button>
+      </Tooltip>
+      <Tooltip wrap text="Move the selected files out of this report for separate review">
+        <button
+          type="button"
+          class="flex cursor-pointer items-center gap-1 px-4 py-[15px] text-[14px] leading-[18px] tracking-[0.16px] hover:bg-white/10"
+          @click="$emit('quarantine')"
+        >
+          Quarantine
+          <Icon name="information" :size="12" />
+        </button>
+      </Tooltip>
       <span class="mx-2 h-5 w-px bg-white/40" />
       <button
         type="button"

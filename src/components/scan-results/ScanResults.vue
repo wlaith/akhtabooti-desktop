@@ -5,6 +5,8 @@ import List from "../list/List.vue";
 import StatTile from "../stat-tile/StatTile.vue";
 import Button from "../button/Button.vue";
 import Checkbox from "../checkbox/Checkbox.vue";
+import Tooltip from "../tooltip/Tooltip.vue";
+import Icon from "../icon/Icon.vue";
 import SearchInput from "../search-input/SearchInput.vue";
 import SortSelect, { type SortOption } from "../sort-select/SortSelect.vue";
 import BatchActionBar from "../batch-action-bar/BatchActionBar.vue";
@@ -202,21 +204,21 @@ function exportSelected() {
             Status
           </h3>
           <div class="flex flex-col gap-4">
-            <Checkbox
-              :label="`All (${visibleResults.length})`"
-              :model-value="statusFilter === 'all'"
-              @update:model-value="statusFilter = 'all'"
-            />
-            <Checkbox
-              :label="`Has findings (${filesWithFindings.length})`"
-              :model-value="statusFilter === 'has-findings'"
-              @update:model-value="statusFilter = 'has-findings'"
-            />
-            <Checkbox
-              :label="`No findings (${filesWithNoFindings.length})`"
-              :model-value="statusFilter === 'no-findings'"
-              @update:model-value="statusFilter = 'no-findings'"
-            />
+            <Tooltip wrap text="Show every scanned file">
+              <Checkbox :model-value="statusFilter === 'all'" @update:model-value="statusFilter = 'all'">
+                <span class="inline-flex items-center gap-1">All ({{ visibleResults.length }}) <Icon name="information" :size="12" class="text-[#525252]" /></span>
+              </Checkbox>
+            </Tooltip>
+            <Tooltip wrap text="Show only files where PII was detected">
+              <Checkbox :model-value="statusFilter === 'has-findings'" @update:model-value="statusFilter = 'has-findings'">
+                <span class="inline-flex items-center gap-1">Has findings ({{ filesWithFindings.length }}) <Icon name="information" :size="12" class="text-[#525252]" /></span>
+              </Checkbox>
+            </Tooltip>
+            <Tooltip wrap text="Show only files with no PII detected">
+              <Checkbox :model-value="statusFilter === 'no-findings'" @update:model-value="statusFilter = 'no-findings'">
+                <span class="inline-flex items-center gap-1">No findings ({{ filesWithNoFindings.length }}) <Icon name="information" :size="12" class="text-[#525252]" /></span>
+              </Checkbox>
+            </Tooltip>
           </div>
         </div>
         <div>
@@ -224,9 +226,21 @@ function exportSelected() {
             Category
           </h3>
           <div class="flex flex-col gap-4">
-            <Checkbox :label="`Email · ${filesWithEmail.length} files`" v-model="categoryFilter.email" />
-            <Checkbox :label="`Phone numbers · ${filesWithPhone.length} files`" v-model="categoryFilter.phone" />
-            <Checkbox :label="`Other · ${totalOther} files`" v-model="categoryFilter.other" />
+            <Tooltip wrap text="Show files containing email addresses">
+              <Checkbox v-model="categoryFilter.email">
+                <span class="inline-flex items-center gap-1">Email · {{ filesWithEmail.length }} files <Icon name="information" :size="12" class="text-[#525252]" /></span>
+              </Checkbox>
+            </Tooltip>
+            <Tooltip wrap text="Show files containing phone numbers">
+              <Checkbox v-model="categoryFilter.phone">
+                <span class="inline-flex items-center gap-1">Phone numbers · {{ filesWithPhone.length }} files <Icon name="information" :size="12" class="text-[#525252]" /></span>
+              </Checkbox>
+            </Tooltip>
+            <Tooltip wrap text="Show files containing other detected PII">
+              <Checkbox v-model="categoryFilter.other">
+                <span class="inline-flex items-center gap-1">Other · {{ totalOther }} files <Icon name="information" :size="12" class="text-[#525252]" /></span>
+              </Checkbox>
+            </Tooltip>
           </div>
         </div>
       </aside>
