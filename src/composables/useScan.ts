@@ -43,6 +43,14 @@ export function useScan() {
     scanning.value = false;
   }
 
+  function reset() {
+    results.value = [];
+    for (const key of Object.keys(pathStatus)) delete pathStatus[key];
+    scanning.value = false;
+    error.value = "";
+    hasScanned.value = false;
+  }
+
   function hasFindings(file: FilePIIs) {
     return (
       file.email_accounts.length > 0 ||
@@ -51,5 +59,5 @@ export function useScan() {
     );
   }
 
-  return { results, pathStatus, scanning, error, hasScanned, scan, hasFindings };
+  return { results, pathStatus, scanning, error, hasScanned, scan, reset, hasFindings };
 }
