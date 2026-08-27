@@ -158,7 +158,7 @@ function exportSelected() {
 
 <template>
   <section class="w-full text-left">
-    <div class="flex flex-wrap items-start justify-between gap-6 px-8 pt-8 pb-6">
+    <div class="mb-6 flex flex-wrap items-start justify-between gap-6">
       <div>
         <h2 class="text-[28px] leading-[36px] font-semibold text-[#161616]">Scan Report</h2>
         <p class="mt-1 text-[13px] leading-[18px] text-[#525252]">
@@ -171,7 +171,7 @@ function exportSelected() {
       </div>
     </div>
 
-    <div class="flex flex-wrap gap-4 px-8 pb-6">
+    <div class="mb-6 flex flex-wrap gap-4">
       <StatTile label="Paths scanned" :value="results.length" />
       <StatTile
         label="Files with findings"
@@ -196,9 +196,9 @@ function exportSelected() {
       />
     </div>
 
-    <p v-if="results.length === 0" class="px-8 text-[#525252]">No files found.</p>
+    <p v-if="results.length === 0" class="text-[#525252]">No files found.</p>
     <div v-else class="flex flex-col md:flex-row">
-      <aside class="flex shrink-0 flex-col gap-6 py-2 pr-6 pl-8 md:w-[282px]">
+      <aside class="flex shrink-0 flex-col gap-6 md:w-[282px] md:pr-6">
         <div>
           <h3 class="mb-3 text-[12px] leading-[16px] font-semibold tracking-[0.32px] text-[#525252] uppercase">
             Status
@@ -245,7 +245,7 @@ function exportSelected() {
         </div>
       </aside>
 
-      <div class="flex min-w-0 flex-1 flex-col gap-4 py-2 pr-8 pb-10 pl-2">
+      <div class="flex min-w-0 flex-1 flex-col gap-4 pb-8 md:border-l md:border-[#e0e0e0] md:pl-6">
         <div class="flex flex-wrap gap-3">
           <SearchInput v-model="search" placeholder="Search by file path" class="min-w-[240px] flex-1" />
           <SortSelect v-model="sort" :options="sortOptions" />

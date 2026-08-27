@@ -23,10 +23,10 @@ function rescan() {
 </script>
 
 <template>
-  <main class="flex min-h-screen flex-col items-center bg-white px-4 pt-[8vh] pb-8 text-center font-sans text-neutral-900">
-    <Stepper class="mb-6 w-full" :steps="steps" :state-of="stepper.stateOf" />
+  <main class="flex min-h-screen flex-col items-center bg-white px-8 pt-[8vh] pb-8 text-center font-sans text-neutral-900">
+    <div class="mx-auto w-full max-w-[1440px]">
+      <Stepper class="mb-6 w-full" :steps="steps" :state-of="stepper.stateOf" />
 
-    <div class="mx-auto w-full" :class="hasScanned && !scanning && !error ? 'max-w-[1440px]' : 'max-w-4xl'">
       <ConfigureScan v-if="!scanning && !hasScanned" @start-scan="startScan" />
       <ScanProgress v-else-if="scanning" :path-status="pathStatus" />
       <p v-else-if="error" class="mt-6 text-center text-red-600 dark:text-red-400">
