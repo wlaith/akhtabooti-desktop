@@ -46,14 +46,12 @@ const allSelected = () =>
 <template>
   <div class="w-full overflow-x-auto">
     <div class="min-w-[1118px]">
-      <div :class="['grid items-start bg-[#e0e0e0]', GRID_COLS]">
-        <span class="flex justify-center pt-4 pb-8 text-[#161616]">
-          <Icon name="chevron-down" />
-        </span>
+      <div :class="['grid items-start bg-[#f4f4f4]', GRID_COLS]">
+        <span class="pt-4 pb-8" />
         <span class="pt-[14px] pb-[30px]"><Checkbox :model-value="allSelected()" @update:model-value="emit('toggle-all', $event)" /></span>
-        <span class="py-4 pr-2 pl-4 text-[14px] leading-[18px] font-semibold tracking-[0.16px] text-[#161616]">File path</span>
-        <span class="py-4 pr-2 pl-4 text-[14px] leading-[18px] font-semibold tracking-[0.16px] text-[#161616]">Findings</span>
-        <span class="py-4 pr-2 pl-4 text-[14px] leading-[18px] font-semibold tracking-[0.16px] text-[#161616]">Status</span>
+        <span class="py-4 pr-2 pl-4 text-[14px] leading-[18px] font-semibold tracking-[0.16px] text-[#525252]">File path</span>
+        <span class="py-4 pr-2 pl-4 text-[14px] leading-[18px] font-semibold tracking-[0.16px] text-[#525252]">Findings</span>
+        <span class="py-4 pr-2 pl-4 text-[14px] leading-[18px] font-semibold tracking-[0.16px] text-[#525252]">Status</span>
       </div>
 
       <div v-for="file in files" :key="file.filename" class="border-b border-[#e0e0e0]">
