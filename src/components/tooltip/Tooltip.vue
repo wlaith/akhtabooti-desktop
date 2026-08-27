@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 
-defineProps<{ text: string }>();
+withDefaults(defineProps<{ text: string; wrap?: boolean }>(), { wrap: false });
 const open = ref(false);
 </script>
 
@@ -13,7 +13,11 @@ const open = ref(false);
     @focusin="open = true"
     @focusout="open = false"
   >
+    <!-- wrap: tooltip sits over an already-interactive child (button, checkbox label),
+         so it must not add its own button/click handling on top of it -->
+    <slot v-if="wrap" />
     <button
+      v-else
       type="button"
       class="flex cursor-pointer items-center text-[#525252] outline-none hover:text-[#161616]"
       :aria-expanded="open"
