@@ -214,7 +214,12 @@ const allSelected = () =>
               </div>
             </div>
           </div>
-          <p v-else class="bg-white p-4 text-green-600">No PII detected in this file</p>
+          <div v-else class="flex flex-col items-center gap-2 bg-white px-4 py-10 text-center">
+            <Icon name="checkmark-outline" :size="24" class="text-[#198038]" />
+            <p class="text-[14px] leading-[18px] tracking-[0.16px] text-[#161616]">
+              No confirmed values or categories detected in this file
+            </p>
+          </div>
         </div>
       </div>
     </div>
