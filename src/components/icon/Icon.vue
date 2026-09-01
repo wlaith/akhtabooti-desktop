@@ -51,6 +51,7 @@ const props = withDefaults(defineProps<{ name: IconName; size?: number }>(), {
 // follow the surrounding text/hover state instead of the exported fill.
 function parseIcon(svg: string) {
   const viewBox = svg.match(/viewBox="([^"]+)"/)?.[1] ?? "0 0 32 32";
+  const [, , canvasWidth, canvasHeight] = viewBox.split(" ");
   const body =
     svg
       .replace(/<\?xml[^>]*\?>/g, "")
@@ -58,8 +59,12 @@ function parseIcon(svg: string) {
       .replace(/<style[\s\S]*?<\/style>/gi, "")
       .replace(/<title>[\s\S]*?<\/title>/gi, "")
       .replace(/<defs>[\s\S]*?<\/defs>/gi, "")
-      .replace(/<rect[^>]*Transparent_Rectangle[^>]*\/>/gi, "")
       .replace(/<rect[^>]*mix-blend-mode:multiply[^>]*\/>/gi, "")
+      .replace(/<rect\b[^>]*\/>/gi, (tag) => {
+        const hasWidth = new RegExp(`width="${canvasWidth}"`).test(tag);
+        const hasHeight = new RegExp(`height="${canvasHeight}"`).test(tag);
+        return hasWidth && hasHeight ? "" : tag;
+      })
       .replace(/\sfill="#[0-9a-fA-F]{3,8}"/g, "")
       .replace(/\sid="[^"]*"/g, "")
       .match(/<svg[^>]*>([\s\S]*)<\/svg>/i)?.[1]
