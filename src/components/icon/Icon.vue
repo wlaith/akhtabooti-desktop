@@ -6,6 +6,19 @@ import informationRaw from "../../assets/icons/information.svg?raw";
 import chevronDownRaw from "../../assets/icons/chevron--down.svg?raw";
 import chevronUpRaw from "../../assets/icons/chevron--up.svg?raw";
 import checkmarkOutlineRaw from "../../assets/icons/step-completed.svg?raw";
+import viewRaw from "../../assets/icons/view.svg?raw";
+import viewOffRaw from "../../assets/icons/view--off.svg?raw";
+import copyRaw from "../../assets/icons/copy.svg?raw";
+import hourglassRaw from "../../assets/icons/hourglass.svg?raw";
+import emailUserRaw from "../../assets/icons/email--user.svg?raw";
+import phoneRaw from "../../assets/icons/phone.svg?raw";
+import documentRaw from "../../assets/icons/document.svg?raw";
+import documentPdfRaw from "../../assets/icons/PDF.svg?raw";
+import documentDocRaw from "../../assets/icons/DOC.svg?raw";
+import documentXlsRaw from "../../assets/icons/XLS.svg?raw";
+import documentHtmlRaw from "../../assets/icons/HTML.svg?raw";
+import documentJsonRaw from "../../assets/icons/JSON.svg?raw";
+import documentTxtRaw from "../../assets/icons/TXT.svg?raw";
 
 type IconName =
   | "folder"
@@ -14,7 +27,20 @@ type IconName =
   | "information"
   | "chevron-down"
   | "chevron-up"
-  | "checkmark-outline";
+  | "checkmark-outline"
+  | "view"
+  | "view-off"
+  | "copy"
+  | "hourglass"
+  | "email-user"
+  | "phone"
+  | "document"
+  | "document-pdf"
+  | "document-doc"
+  | "document-xls"
+  | "document-html"
+  | "document-json"
+  | "document-txt";
 
 const props = withDefaults(defineProps<{ name: IconName; size?: number }>(), {
   size: 16,
@@ -49,6 +75,19 @@ const icons: Record<IconName, { viewBox: string; body: string }> = {
   "chevron-down": parseIcon(chevronDownRaw),
   "chevron-up": parseIcon(chevronUpRaw),
   "checkmark-outline": parseIcon(checkmarkOutlineRaw),
+  view: parseIcon(viewRaw),
+  "view-off": parseIcon(viewOffRaw),
+  copy: parseIcon(copyRaw),
+  hourglass: parseIcon(hourglassRaw),
+  "email-user": parseIcon(emailUserRaw),
+  phone: parseIcon(phoneRaw),
+  document: parseIcon(documentRaw),
+  "document-pdf": parseIcon(documentPdfRaw),
+  "document-doc": parseIcon(documentDocRaw),
+  "document-xls": parseIcon(documentXlsRaw),
+  "document-html": parseIcon(documentHtmlRaw),
+  "document-json": parseIcon(documentJsonRaw),
+  "document-txt": parseIcon(documentTxtRaw),
 };
 </script>
 
