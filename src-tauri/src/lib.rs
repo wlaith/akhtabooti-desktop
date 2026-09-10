@@ -15,12 +15,20 @@ async fn scan_path(path: String) -> Result<Vec<FilePIIs>, String> {
     .map_err(|e| e.to_string())
 }
 
+#[tauri::command]
+async fn write_file(path: String, contents: String) -> Result<(), String> {
+    tauri::async_runtime::spawn_blocking(move || std::fs::write(&path, contents))
+        .await
+        .map_err(|e| e.to_string())?
+        .map_err(|e| e.to_string())
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_dialog::init())
-        .invoke_handler(tauri::generate_handler![scan_path])
+        .invoke_handler(tauri::generate_handler![scan_path, write_file])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
