@@ -52,4 +52,5 @@ jobs:
           releaseName: 'App v__VERSION__'
           releaseDraft: true
           prerelease: false
+          uploadWorkflowArtifacts: true
           args: ${{ matrix.args }}
