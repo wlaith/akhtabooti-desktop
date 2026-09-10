@@ -15,16 +15,6 @@ import FindingsTable from "../findings-table/FindingsTable.vue";
 const props = defineProps<{ results: FilePIIs[] }>();
 const emit = defineEmits<{ (e: "rescan"): void }>();
 
-// Local-only simulation of destructive actions: no backend command exists for
-// these yet, so redact/quarantine just mutate this screen's view of the data.
-const quarantined = reactive(new Set<string>());
-const redacted = reactive(new Set<string>());
-
-function displayFile(file: FilePIIs): FilePIIs {
-  if (!redacted.has(file.filename)) return file;
-  return { ...file, email_accounts: [], phone_numbers: [], other_piis: [] };
-}
-
 function hasFindings(file: FilePIIs) {
   return (
     file.email_accounts.length > 0 ||
@@ -33,9 +23,7 @@ function hasFindings(file: FilePIIs) {
   );
 }
 
-const visibleResults = computed(() =>
-  props.results.filter((f) => !quarantined.has(f.filename)).map(displayFile),
-);
+const visibleResults = computed(() => props.results);
 
 const totalEmails = computed(() =>
   visibleResults.value.reduce((sum, f) => sum + f.email_accounts.length, 0),
@@ -124,24 +112,6 @@ function toggleAllSelected(value: boolean) {
 
 function clearSelection() {
   selected.clear();
-}
-
-function confirmAnd(message: string, action: () => void) {
-  if (window.confirm(message)) action();
-}
-
-function redactSelected() {
-  confirmAnd(`Redact findings in ${selected.size} file(s)? This cannot be undone.`, () => {
-    selected.forEach((filename) => redacted.add(filename));
-    clearSelection();
-  });
-}
-
-function quarantineSelected() {
-  confirmAnd(`Quarantine ${selected.size} file(s)? They will be removed from this report.`, () => {
-    selected.forEach((filename) => quarantined.add(filename));
-    clearSelection();
-  });
 }
 
 function exportSelected() {
@@ -254,9 +224,7 @@ function exportSelected() {
         <BatchActionBar
           v-if="selected.size > 0"
           :count="selected.size"
-          @redact="redactSelected"
           @export="exportSelected"
-          @quarantine="quarantineSelected"
           @cancel="clearSelection"
         />
 
