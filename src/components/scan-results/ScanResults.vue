@@ -198,12 +198,12 @@ function exportSelected() {
 
     <p v-if="results.length === 0" class="text-[#525252]">No files found.</p>
     <div v-else class="flex flex-col md:flex-row">
-      <aside class="flex shrink-0 flex-col gap-6 md:w-[282px] md:pr-6">
+      <aside class="flex shrink-0 flex-col gap-4 md:w-[282px] md:gap-6 md:pr-6">
         <div>
-          <h3 class="mb-3 text-[12px] leading-[16px] font-semibold tracking-[0.32px] text-[#525252] uppercase">
+          <h3 class="mb-2 text-[12px] leading-[16px] font-semibold tracking-[0.32px] text-[#525252] uppercase md:mb-3">
             Status
           </h3>
-          <div class="flex flex-col gap-4">
+          <div class="flex flex-col gap-2 md:gap-4">
             <Tooltip wrap text="Show every scanned file">
               <Checkbox :model-value="statusFilter === 'all'" @update:model-value="statusFilter = 'all'">
                 <span class="inline-flex items-center gap-1">All ({{ visibleResults.length }}) <Icon name="information" :size="12" class="text-[#525252]" /></span>
@@ -222,10 +222,10 @@ function exportSelected() {
           </div>
         </div>
         <div>
-          <h3 class="mb-3 text-[12px] leading-[16px] font-semibold tracking-[0.32px] text-[#525252] uppercase">
+          <h3 class="mb-2 text-[12px] leading-[16px] font-semibold tracking-[0.32px] text-[#525252] uppercase md:mb-3">
             Category
           </h3>
-          <div class="flex flex-col gap-4">
+          <div class="flex flex-col gap-2 md:gap-4">
             <Tooltip wrap text="Show files containing email addresses">
               <Checkbox v-model="categoryFilter.email">
                 <span class="inline-flex items-center gap-1">Email · {{ filesWithEmail.length }} files <Icon name="information" :size="12" class="text-[#525252]" /></span>

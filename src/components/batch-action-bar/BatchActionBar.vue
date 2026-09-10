@@ -12,11 +12,11 @@ defineEmits<{
 </script>
 
 <template>
-  <div class="sticky top-0 z-10 flex items-center bg-[#4b5cda] text-white">
+  <div class="sticky top-0 z-10 flex flex-wrap items-center gap-y-1 bg-[#4b5cda] text-white">
     <span class="flex-1 px-4 py-[15px] text-[14px] leading-[18px] tracking-[0.16px]">
       {{ count }} selected
     </span>
-    <div class="flex items-center">
+    <div class="flex flex-wrap items-center">
       <Tooltip wrap text="Permanently remove the detected PII from the selected files">
         <button
           type="button"
