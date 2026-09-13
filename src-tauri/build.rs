@@ -1,14 +1,18 @@
 use std::path::PathBuf;
 use std::{env, fs};
 
+// Forces akhtabooti-core (and its native extractous compile) to finish
+// before this script runs — [dependencies] alone doesn't guarantee that.
+use akhtabooti_core as _;
+
 fn main() {
     stage_tika_lib();
     tauri_build::build()
 }
 
-/// extractous builds libtika_native into a hash-suffixed directory under `target/`, but the bundler config needs a stable path, so copy it to `frameworks/`. akhtabooti-core's build script has already made the library's own name relocatable by the time this runs.
+/// Copies libtika_native into `frameworks/`, a stable path the bundler can reference.
 fn stage_tika_lib() {
-    // In a build script `cfg!(target_os)` reports the host, not the build target, so read the target from Cargo instead.
+    // cfg!(target_os) reports the host here, not the build target.
     let target_os = env::var("CARGO_CFG_TARGET_OS").unwrap_or_default();
 
     let lib_name = match target_os.as_str() {
@@ -17,14 +21,13 @@ fn stage_tika_lib() {
         _ => return,
     };
 
-    // a .deb/.rpm installs to absolute paths and has no so the binary needs an explicit search path. $ORIGIN is resolved by the loader at runtime relative to the executable, so /usr/bin/akhtabooti finds /usr/lib/akhtabooti/.
+    // $ORIGIN is resolved at runtime relative to the executable, so /usr/bin/akhtabooti finds the lib at /usr/lib/akhtabooti/.
     if target_os == "linux" {
         println!("cargo:rustc-link-arg-bins=-Wl,-rpath,$ORIGIN/../lib/akhtabooti");
     }
 
     let Some(src) = find_tika_lib(lib_name) else {
-        println!("cargo:warning={lib_name} not found; the bundled app will not start");
-        return;
+        panic!("{lib_name} not found; is akhtabooti-core building correctly?");
     };
 
     let dest_dir = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("frameworks");
@@ -36,7 +39,7 @@ fn stage_tika_lib() {
 }
 
 fn find_tika_lib(lib_name: &str) -> Option<PathBuf> {
-    // Our OUT_DIR is a sibling of extractous's under `target/<profile>/build/`, so walk up two levels and look across for it.
+    // Our OUT_DIR is a sibling of extractous's, two levels up under build/.
     let out_dir = PathBuf::from(env::var("OUT_DIR").ok()?);
     let build_dir = out_dir.parent()?.parent()?;
 

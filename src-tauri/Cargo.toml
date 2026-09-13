@@ -16,6 +16,12 @@ crate-type = ["staticlib", "cdylib", "rlib"]
 
 [build-dependencies]
 tauri-build = { version = "2", features = [] }
+# Also listed under [dependencies]. Duplicated here so our build script (which
+# stages libtika_native for bundling) is forced to run after akhtabooti-core
+# and its extractous/GraalVM native build finish — Cargo only orders a build
+# script after crates it's actually linked against as a build-dependency, not
+# after ordinary dependencies of the final binary.
+akhtabooti-core = { git = "https://github.com/wlaith/akhtabooti-core", branch = "main" }
 
 [dependencies]
 tauri = { version = "2", features = [] }
