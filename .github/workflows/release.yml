@@ -47,6 +47,16 @@ jobs:
       - uses: tauri-apps/tauri-action@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Without these the bundle falls back to the ad-hoc identity in
+          # tauri.conf.json, which Gatekeeper rejects on other machines.
+          # Notarization needs the APPLE_ID/APPLE_PASSWORD/APPLE_TEAM_ID trio;
+          # the bundler skips it with a warning when they are absent.
+          APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
+          APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
+          APPLE_SIGNING_IDENTITY: ${{ secrets.APPLE_SIGNING_IDENTITY }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
         with:
           tagName: app-v__VERSION__
           releaseName: 'App v__VERSION__'
@@ -54,3 +64,7 @@ jobs:
           prerelease: false
           uploadWorkflowArtifacts: true
           args: ${{ matrix.args }}
+
+      # Catches builds that run here but die at launch on any other Mac.
+      - if: matrix.platform == 'macos-latest'
+        run: sh src-tauri/scripts/verify-macos-bundle.sh

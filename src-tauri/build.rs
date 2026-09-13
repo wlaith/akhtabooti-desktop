@@ -1,8 +1,8 @@
 use std::path::PathBuf;
 use std::{env, fs};
 
-// Forces akhtabooti-core (and its native extractous compile) to finish
-// before this script runs — [dependencies] alone doesn't guarantee that.
+// Forces akhtabooti-core's extractous/GraalVM build to finish before this runs.
+// See the note in Cargo.toml's [build-dependencies].
 use akhtabooti_core as _;
 
 fn main() {
@@ -10,7 +10,14 @@ fn main() {
     tauri_build::build()
 }
 
-/// Copies libtika_native into `frameworks/`, a stable path the bundler can reference.
+/// Copies libtika_native into `frameworks/`, where tauri.conf.json expects it.
+/// Staging happens here because `tauri_build` checks those paths exist while
+/// this script runs.
+///
+/// Only the copy happens here. Fixing the absolute install name GraalVM stamped
+/// into the library is left to scripts/relocate-native-libs.sh, which runs after
+/// linking, a build script can't tell which copy the binary actually linked.
+/// Any copy is fine to stage: every extractous unit builds the same library.
 fn stage_tika_lib() {
     // cfg!(target_os) reports the host here, not the build target.
     let target_os = env::var("CARGO_CFG_TARGET_OS").unwrap_or_default();
@@ -20,11 +27,6 @@ fn stage_tika_lib() {
         "linux" => "libtika_native.so",
         _ => return,
     };
-
-    // $ORIGIN is resolved at runtime relative to the executable, so /usr/bin/akhtabooti finds the lib at /usr/lib/akhtabooti/.
-    if target_os == "linux" {
-        println!("cargo:rustc-link-arg-bins=-Wl,-rpath,$ORIGIN/../lib/akhtabooti");
-    }
 
     let Some(src) = find_tika_lib(lib_name) else {
         panic!("{lib_name} not found; is akhtabooti-core building correctly?");
@@ -36,6 +38,8 @@ fn stage_tika_lib() {
     if let Err(e) = fs::create_dir_all(&dest_dir).and_then(|_| fs::copy(&src, &dest)) {
         panic!("failed to stage {} -> {}: {e}", src.display(), dest.display());
     }
+
+    println!("cargo:rerun-if-changed={}", src.display());
 }
 
 fn find_tika_lib(lib_name: &str) -> Option<PathBuf> {

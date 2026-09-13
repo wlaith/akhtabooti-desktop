@@ -7,6 +7,7 @@
     "beforeDevCommand": "npm run dev",
     "devUrl": "http://localhost:1420",
     "beforeBuildCommand": "npm run build",
+    "beforeBundleCommand": "sh src-tauri/scripts/relocate-native-libs.sh",
     "frontendDist": "../dist"
   },
   "app": {
@@ -34,7 +35,10 @@
       "icons/icon.ico"
     ],
     "macOS": {
-      "frameworks": ["frameworks/libtika_native.dylib"]
+      "frameworks": ["frameworks/libtika_native.dylib"],
+      "minimumSystemVersion": "10.15",
+      "signingIdentity": "-",
+      "entitlements": "entitlements.plist"
     },
     "linux": {
       "deb": {
