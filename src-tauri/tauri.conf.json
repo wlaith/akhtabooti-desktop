@@ -32,6 +32,21 @@
       "icons/128x128@2x.png",
       "icons/icon.icns",
       "icons/icon.ico"
-    ]
+    ],
+    "macOS": {
+      "frameworks": ["frameworks/libtika_native.dylib"]
+    },
+    "linux": {
+      "deb": {
+        "files": {
+          "/usr/lib/akhtabooti/libtika_native.so": "frameworks/libtika_native.so"
+        }
+      },
+      "rpm": {
+        "files": {
+          "/usr/lib/akhtabooti/libtika_native.so": "frameworks/libtika_native.so"
+        }
+      }
+    }
   }
 }
