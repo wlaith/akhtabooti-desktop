@@ -2,6 +2,9 @@ name: Release (Windows self-hosted)
 
 on:
   workflow_dispatch:
+  push:
+    branches: [feat/setup-github-actions]
+    paths: ['.github/workflows/release-windows-local.yml']
 
 permissions:
   contents: write
