@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import { ref } from "vue";
 
-withDefaults(defineProps<{ text: string; wrap?: boolean }>(), { wrap: false });
+withDefaults(defineProps<{ text: string; wrap?: boolean; placement?: "top" | "right" }>(), {
+  wrap: false,
+  placement: "top",
+});
 const open = ref(false);
 </script>
 
@@ -29,7 +32,12 @@ const open = ref(false);
     <span
       v-if="open"
       role="tooltip"
-      class="absolute bottom-full left-1/2 z-20 mb-2 w-max max-w-[288px] -translate-x-1/2 rounded bg-[#393939] px-3 py-2 text-left text-[12px] leading-[16px] text-white shadow-lg"
+      class="absolute z-20 w-max max-w-[288px] text-left text-[12px] leading-[16px] text-white bg-[#393939] rounded px-3 py-2 shadow-lg"
+      :class="
+        placement === 'right'
+          ? 'top-1/2 left-full ml-2 -translate-y-1/2'
+          : 'bottom-full left-1/2 mb-2 -translate-x-1/2'
+      "
     >
       {{ text }}
     </span>
