@@ -30,10 +30,12 @@ async function startScan(paths: string[]) {
   stepper.goTo(1);
   await scan(paths);
   stepper.goTo(2);
+  stepper.complete(2);
 }
 
 function rescan() {
   reset();
+  stepper.clearCompleted();
   stepper.goTo(0);
 }
 
