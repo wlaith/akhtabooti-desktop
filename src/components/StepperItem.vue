@@ -11,6 +11,25 @@ const props = defineProps<{
   state: StepState;
 }>();
 
+const emit = defineEmits<{
+  (e: "select"): void;
+}>();
+
+const clickable = computed(() => props.state === "completed");
+
+const statusLabel = computed(() => {
+  switch (props.state) {
+    case "completed":
+      return "Completed";
+    case "active":
+      return "Current step";
+    case "disabled":
+      return "Disabled";
+    default:
+      return "Upcoming";
+  }
+});
+
 const borderClass = computed(() =>
   props.state === "active" || props.state === "completed"
     ? "border-blue-500"
@@ -34,19 +53,37 @@ const icon = computed(() => {
   if (props.state === "active") return iconStepActive;
   return iconStepUpcoming;
 });
+
+const headerAttrs = computed(() => {
+  const attrs: Record<string, string> = {};
+  if (clickable.value) attrs.type = "button";
+  if (props.state === "active") attrs["aria-current"] = "step";
+  if (props.state === "disabled") attrs["aria-disabled"] = "true";
+  return attrs;
+});
 </script>
 
 <template>
   <div
     class="flex flex-1 flex-col items-start gap-1 border-t-2 pt-2.5 pr-4 transition-colors duration-300"
     :class="borderClass"
+    role="listitem"
   >
-    <div class="flex items-center gap-2">
+    <component
+      :is="clickable ? 'button' : 'div'"
+      v-bind="headerAttrs"
+      class="flex items-center gap-2 rounded-sm"
+      :class="clickable ? 'cursor-pointer hover:opacity-80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-500 focus-visible:outline-offset-2' : ''"
+      @click="clickable && emit('select')"
+    >
       <Transition name="step-icon" mode="out-in">
-        <span :key="state" class="size-4 shrink-0" :class="iconClass" v-html="icon" />
+        <span :key="state" class="size-4 shrink-0" :class="iconClass" aria-hidden="true" v-html="icon" />
       </Transition>
-      <span class="text-sm font-medium whitespace-nowrap transition-colors duration-300" :class="labelClass">{{ label }}</span>
-    </div>
+      <span class="text-sm font-medium whitespace-nowrap transition-colors duration-300" :class="labelClass">
+        {{ label }}
+        <span class="sr-only">({{ statusLabel }})</span>
+      </span>
+    </component>
     <p
       v-if="description"
       class="pl-6 text-xs text-neutral-500 dark:text-neutral-400"

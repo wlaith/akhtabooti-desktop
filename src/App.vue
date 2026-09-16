@@ -12,6 +12,7 @@ import AboutDialog from "./components/about/AboutDialog.vue";
 
 const steps = [{ label: "Configure" }, { label: "Scan" }, { label: "Results" }];
 const stepper = useStepper(steps);
+const { currentIndex } = stepper;
 const { results, pathStatus, scanning, error, hasScanned, scan, reset } = useScan();
 
 const view = ref<"scan" | "guide">("scan");
@@ -35,6 +36,10 @@ function rescan() {
   reset();
   stepper.goTo(0);
 }
+
+function handleStepSelect(index: number) {
+  if (index === 0) rescan();
+}
 </script>
 
 <template>
@@ -45,7 +50,13 @@ function rescan() {
       <GuideView v-if="view === 'guide'" @close="view = 'scan'" />
 
       <div v-else class="p-8">
-        <Stepper class="mb-6 w-full max-w-[1440px]" :steps="steps" :state-of="stepper.stateOf" />
+        <Stepper
+          class="mb-6 w-full max-w-[1440px]"
+          :steps="steps"
+          :state-of="stepper.stateOf"
+          :current-index="currentIndex"
+          @select="handleStepSelect"
+        />
 
         <ConfigureScan v-if="!scanning && !hasScanned" @start-scan="startScan" />
         <ScanProgress v-else-if="scanning" :path-status="pathStatus" />
