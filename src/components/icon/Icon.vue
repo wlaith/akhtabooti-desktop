@@ -19,6 +19,9 @@ import documentXlsRaw from "../../assets/icons/XLS.svg?raw";
 import documentHtmlRaw from "../../assets/icons/HTML.svg?raw";
 import documentJsonRaw from "../../assets/icons/JSON.svg?raw";
 import documentTxtRaw from "../../assets/icons/TXT.svg?raw";
+import scanAnalyzeRaw from "../../assets/icons/ibm-software--watsonx--data--analyze-and-process.svg?raw";
+import helpRaw from "../../assets/icons/help.svg?raw";
+import closeRaw from "../../assets/icons/close.svg?raw";
 
 type IconName =
   | "folder"
@@ -40,7 +43,10 @@ type IconName =
   | "document-xls"
   | "document-html"
   | "document-json"
-  | "document-txt";
+  | "document-txt"
+  | "scan-analyze"
+  | "help"
+  | "close";
 
 const props = withDefaults(defineProps<{ name: IconName; size?: number }>(), {
   size: 16,
@@ -93,6 +99,9 @@ const icons: Record<IconName, { viewBox: string; body: string }> = {
   "document-html": parseIcon(documentHtmlRaw),
   "document-json": parseIcon(documentJsonRaw),
   "document-txt": parseIcon(documentTxtRaw),
+  "scan-analyze": parseIcon(scanAnalyzeRaw),
+  help: parseIcon(helpRaw),
+  close: parseIcon(closeRaw),
 };
 </script>
 
