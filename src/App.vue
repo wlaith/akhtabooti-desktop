@@ -14,8 +14,17 @@ import AboutDialog from "./components/about/AboutDialog.vue";
 const steps = [{ label: "Configure" }, { label: "Scan" }, { label: "Results" }];
 const stepper = useStepper(steps);
 const { currentIndex } = stepper;
-const { results, pathStatus, pathErrors, scanning, allFailed, hasScanned, scan, cancelScan, reset } =
-  useScan();
+const {
+  results,
+  pathStatus,
+  pathErrors,
+  scanning,
+  allFailed,
+  hasScanned,
+  scan,
+  cancelScan,
+  reset,
+} = useScan();
 
 const view = ref<"scan" | "guide">("scan");
 const aboutOpen = ref(false);
@@ -70,11 +79,7 @@ function handleStepSelect(index: number) {
         />
 
         <ConfigureScan v-if="!scanning && !hasScanned" @start-scan="startScan" />
-        <ScanProgress
-          v-else-if="scanning"
-          :path-status="pathStatus"
-          @cancel="handleCancelScan"
-        />
+        <ScanProgress v-else-if="scanning" :path-status="pathStatus" @cancel="handleCancelScan" />
         <ErrorState v-else-if="allFailed" :detail="Object.values(pathErrors)[0]" @retry="rescan" />
         <ScanResults
           v-else-if="hasScanned"

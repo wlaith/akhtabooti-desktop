@@ -26,7 +26,9 @@ const sections = [
 <template>
   <section class="flex h-full flex-col overflow-y-auto p-8 text-left">
     <div class="mb-6 flex items-start justify-between">
-      <h2 class="text-[24px] leading-[32px] font-semibold text-text-primary">How to use Akhtabooti</h2>
+      <h2 class="text-[24px] leading-[32px] font-semibold text-text-primary">
+        How to use Akhtabooti
+      </h2>
       <button
         type="button"
         class="flex h-8 w-8 items-center justify-center text-text-secondary outline-none hover:bg-text-primary/8 hover:text-text-primary"
