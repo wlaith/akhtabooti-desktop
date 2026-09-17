@@ -22,6 +22,10 @@ import documentTxtRaw from "../../assets/icons/TXT.svg?raw";
 import scanAnalyzeRaw from "../../assets/icons/ibm-software--watsonx--data--analyze-and-process.svg?raw";
 import helpRaw from "../../assets/icons/help.svg?raw";
 import closeRaw from "../../assets/icons/close.svg?raw";
+import filterRaw from "../../assets/icons/filter.svg?raw";
+import filterRemoveRaw from "../../assets/icons/filter--remove.svg?raw";
+import sunRaw from "../../assets/icons/sun.svg?raw";
+import moonRaw from "../../assets/icons/moon.svg?raw";
 
 type IconName =
   | "folder"
@@ -46,7 +50,11 @@ type IconName =
   | "document-txt"
   | "scan-analyze"
   | "help"
-  | "close";
+  | "close"
+  | "filter"
+  | "filter-remove"
+  | "sun"
+  | "moon";
 
 const props = withDefaults(defineProps<{ name: IconName; size?: number }>(), {
   size: 16,
@@ -102,6 +110,10 @@ const icons: Record<IconName, { viewBox: string; body: string }> = {
   "scan-analyze": parseIcon(scanAnalyzeRaw),
   help: parseIcon(helpRaw),
   close: parseIcon(closeRaw),
+  filter: parseIcon(filterRaw),
+  "filter-remove": parseIcon(filterRemoveRaw),
+  sun: parseIcon(sunRaw),
+  moon: parseIcon(moonRaw),
 };
 </script>
 

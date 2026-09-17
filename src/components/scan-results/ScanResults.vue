@@ -13,9 +13,15 @@ import SearchInput from "../search-input/SearchInput.vue";
 import SortSelect, { type SortOption } from "../sort-select/SortSelect.vue";
 import BatchActionBar from "../batch-action-bar/BatchActionBar.vue";
 import FindingsTable from "../findings-table/FindingsTable.vue";
+import FailedPathsTable from "../findings-table/FailedPathsTable.vue";
 
-const props = defineProps<{ results: FilePIIs[] }>();
+const props = withDefaults(
+  defineProps<{ results: FilePIIs[]; pathErrors?: Record<string, string> }>(),
+  { pathErrors: () => ({}) },
+);
 const emit = defineEmits<{ (e: "rescan"): void }>();
+
+const failedPaths = computed(() => Object.entries(props.pathErrors));
 
 function hasFindings(file: FilePIIs) {
   return (
@@ -133,10 +139,7 @@ async function exportSelected() {
   <section class="w-full text-left">
     <div class="mb-6 flex flex-wrap items-start justify-between gap-6">
       <div>
-        <h2 class="text-[28px] leading-[36px] font-semibold text-[#161616]">Scan Report</h2>
-        <p class="mt-1 text-[13px] leading-[18px] text-[#525252]">
-          Scanned locally on this device · No data left this machine
-        </p>
+        <h2 class="text-[28px] leading-[36px] font-semibold text-text-primary">Scan Report</h2>
       </div>
       <div class="flex shrink-0 gap-3">
         <Button variant="secondary" size="medium" @click="emit('rescan')">Re-scan</Button>
@@ -169,56 +172,56 @@ async function exportSelected() {
       />
     </div>
 
-    <p v-if="results.length === 0" class="text-[#525252]">No files found.</p>
+    <p v-if="results.length === 0" class="text-text-secondary">No files found.</p>
     <div v-else class="flex flex-col md:flex-row">
       <aside class="flex shrink-0 flex-col gap-4 md:w-[282px] md:gap-6 md:pr-6">
         <div>
-          <h3 class="mb-2 text-[12px] leading-[16px] font-semibold tracking-[0.32px] text-[#525252] uppercase md:mb-3">
+          <h3 class="mb-2 text-[12px] leading-[16px] font-semibold tracking-[0.32px] text-text-secondary uppercase md:mb-3">
             Status
           </h3>
           <div class="flex flex-col gap-2 md:gap-4">
             <Tooltip wrap text="Show every scanned file">
               <Checkbox :model-value="statusFilter === 'all'" @update:model-value="statusFilter = 'all'">
-                <span class="inline-flex items-center gap-1">All ({{ visibleResults.length }}) <Icon name="information" :size="12" class="text-[#525252]" /></span>
+                <span class="inline-flex items-center gap-1">All ({{ visibleResults.length }}) <Icon name="information" :size="12" class="text-text-secondary" /></span>
               </Checkbox>
             </Tooltip>
             <Tooltip wrap text="Show only files where PII was detected">
               <Checkbox :model-value="statusFilter === 'has-findings'" @update:model-value="statusFilter = 'has-findings'">
-                <span class="inline-flex items-center gap-1">Has findings ({{ filesWithFindings.length }}) <Icon name="information" :size="12" class="text-[#525252]" /></span>
+                <span class="inline-flex items-center gap-1">Has findings ({{ filesWithFindings.length }}) <Icon name="information" :size="12" class="text-text-secondary" /></span>
               </Checkbox>
             </Tooltip>
             <Tooltip wrap text="Show only files with no PII detected">
               <Checkbox :model-value="statusFilter === 'no-findings'" @update:model-value="statusFilter = 'no-findings'">
-                <span class="inline-flex items-center gap-1">No findings ({{ filesWithNoFindings.length }}) <Icon name="information" :size="12" class="text-[#525252]" /></span>
+                <span class="inline-flex items-center gap-1">No findings ({{ filesWithNoFindings.length }}) <Icon name="information" :size="12" class="text-text-secondary" /></span>
               </Checkbox>
             </Tooltip>
           </div>
         </div>
         <div>
-          <h3 class="mb-2 text-[12px] leading-[16px] font-semibold tracking-[0.32px] text-[#525252] uppercase md:mb-3">
+          <h3 class="mb-2 text-[12px] leading-[16px] font-semibold tracking-[0.32px] text-text-secondary uppercase md:mb-3">
             Category
           </h3>
           <div class="flex flex-col gap-2 md:gap-4">
             <Tooltip wrap text="Show files containing email addresses">
               <Checkbox v-model="categoryFilter.email">
-                <span class="inline-flex items-center gap-1">Email · {{ filesWithEmail.length }} files <Icon name="information" :size="12" class="text-[#525252]" /></span>
+                <span class="inline-flex items-center gap-1">Email · {{ filesWithEmail.length }} files <Icon name="information" :size="12" class="text-text-secondary" /></span>
               </Checkbox>
             </Tooltip>
             <Tooltip wrap text="Show files containing phone numbers">
               <Checkbox v-model="categoryFilter.phone">
-                <span class="inline-flex items-center gap-1">Phone numbers · {{ filesWithPhone.length }} files <Icon name="information" :size="12" class="text-[#525252]" /></span>
+                <span class="inline-flex items-center gap-1">Phone numbers · {{ filesWithPhone.length }} files <Icon name="information" :size="12" class="text-text-secondary" /></span>
               </Checkbox>
             </Tooltip>
             <Tooltip wrap text="Show files containing other detected PII">
               <Checkbox v-model="categoryFilter.other">
-                <span class="inline-flex items-center gap-1">Other · {{ totalOther }} files <Icon name="information" :size="12" class="text-[#525252]" /></span>
+                <span class="inline-flex items-center gap-1">Other · {{ totalOther }} files <Icon name="information" :size="12" class="text-text-secondary" /></span>
               </Checkbox>
             </Tooltip>
           </div>
         </div>
       </aside>
 
-      <div class="flex min-w-0 flex-1 flex-col gap-4 pb-8 md:border-l md:border-[#e0e0e0] md:pl-6">
+      <div class="flex min-w-0 flex-1 flex-col gap-4 pb-8 md:border-l md:border-text-primary/12 md:pl-6">
         <div class="flex flex-wrap gap-3">
           <SearchInput v-model="search" placeholder="Search by file path" class="min-w-[240px] flex-1" />
           <SortSelect v-model="sort" :options="sortOptions" />
@@ -231,7 +234,7 @@ async function exportSelected() {
           @cancel="clearSelection"
         />
 
-        <p v-if="filteredResults.length === 0" class="text-[#525252]">
+        <p v-if="filteredResults.length === 0" class="text-text-secondary">
           No files match these filters.
         </p>
         <List v-else title="Findings">
@@ -241,6 +244,10 @@ async function exportSelected() {
             @toggle="toggleSelected"
             @toggle-all="toggleAllSelected"
           />
+        </List>
+
+        <List v-if="failedPaths.length > 0" :title="`Couldn't be scanned (${failedPaths.length})`">
+          <FailedPathsTable :entries="failedPaths" />
         </List>
       </div>
     </div>

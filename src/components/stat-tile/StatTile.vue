@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import Button from "../button/Button.vue";
+import Icon from "../icon/Icon.vue";
+
 withDefaults(defineProps<{ label: string; value: number | string; clickable?: boolean; active?: boolean }>(), {
   clickable: false,
   active: false,
@@ -7,24 +10,17 @@ defineEmits<{ (e: "click"): void }>();
 </script>
 
 <template>
-  <component
-    :is="clickable ? 'button' : 'div'"
-    type="button"
-    class="relative flex min-w-[180px] flex-1 flex-col bg-[#f4f4f4] p-4 pb-12 text-left outline-none"
-    :class="clickable ? (active ? 'ring-2 ring-inset ring-[#4b5cda]' : 'cursor-pointer hover:bg-[#e8e8e8]') : ''"
-    :aria-pressed="clickable ? active : undefined"
-    @click="clickable && $emit('click')"
+  <div
+    class="flex min-w-[180px] flex-1 flex-col gap-3 border bg-surface p-4 text-left"
+    :class="active ? 'border-action-primary' : 'border-text-primary/12'"
   >
-    <span class="text-[28px] leading-[36px] font-normal text-[#161616]">{{ value }}</span>
-    <span class="text-[14px] leading-[18px] tracking-[0.16px] text-[#161616]">{{ label }}</span>
-    <svg
-      v-if="clickable"
-      class="absolute right-[3px] bottom-[3px] h-5 w-5 text-[#4b5cda]"
-      viewBox="0 0 20 20"
-      fill="none"
-      aria-hidden="true"
-    >
-      <path d="M3 10h13M11 5l5 5-5 5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" />
-    </svg>
-  </component>
+    <div>
+      <span class="text-[28px] leading-[36px] font-normal text-text-primary">{{ value }}</span>
+      <span class="block text-[14px] leading-[18px] tracking-[0.16px] text-text-primary">{{ label }}</span>
+    </div>
+    <Button v-if="clickable" :variant="active ? 'primary' : 'outline'" size="small" class="self-start" @click="$emit('click')">
+      {{ active ? "Remove filter" : "Apply filter" }}
+      <template #icon><Icon :name="active ? 'filter-remove' : 'filter'" :size="14" /></template>
+    </Button>
+  </div>
 </template>

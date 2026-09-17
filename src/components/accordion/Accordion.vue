@@ -1,7 +1,7 @@
 <script setup lang="ts"></script>
 
 <template>
-  <div class="w-full border-b border-[#c6c6c6] text-left">
+  <div class="w-full border-b border-text-primary/20 text-left">
     <slot />
   </div>
 </template>

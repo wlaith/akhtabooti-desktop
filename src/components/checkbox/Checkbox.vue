@@ -7,7 +7,7 @@ defineEmits<{ (e: "update:modelValue", value: boolean): void }>();
 
 <template>
   <label
-    class="inline-flex items-center gap-2 text-[14px] leading-[18px] tracking-[0.16px] text-[#161616]"
+    class="inline-flex items-center gap-2 text-[14px] leading-[18px] tracking-[0.16px] text-text-primary"
     :class="disabled ? 'cursor-not-allowed opacity-40' : 'cursor-pointer'"
   >
     <span class="relative flex h-4 w-4 shrink-0 items-center justify-center">
@@ -20,12 +20,12 @@ defineEmits<{ (e: "update:modelValue", value: boolean): void }>();
         @change="$emit('update:modelValue', ($event.target as HTMLInputElement).checked)"
       />
       <span
-        class="pointer-events-none absolute inset-0 border border-[#161616]"
-        :class="modelValue ? 'bg-[#161616]' : 'bg-white'"
+        class="pointer-events-none absolute inset-0 border border-text-primary"
+        :class="modelValue ? 'bg-text-primary' : 'bg-surface'"
       />
       <svg
         v-if="modelValue"
-        class="pointer-events-none relative h-2.5 w-2.5 text-white"
+        class="pointer-events-none relative h-2.5 w-2.5 text-text-inverse"
         viewBox="0 0 16 16"
         fill="none"
         aria-hidden="true"

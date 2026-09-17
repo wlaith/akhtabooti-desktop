@@ -92,26 +92,26 @@ const allSelected = () =>
 
 <template>
   <div class="w-full overflow-x-auto">
-    <div :class="['sticky top-0 z-10 grid min-w-fit items-center bg-[#f4f4f4]', GRID_COLS]">
+    <div :class="['sticky top-0 z-10 grid min-w-fit items-center bg-neutral-bg', GRID_COLS]">
       <span />
       <Checkbox :model-value="allSelected()" @update:model-value="emit('toggle-all', $event)" />
-      <span class="min-w-0 truncate py-4 pr-2 pl-1 text-[14px] leading-[18px] font-semibold tracking-[0.16px] text-[#525252]">File path</span>
-      <span class="truncate py-4 pr-2 pl-1 text-[14px] leading-[18px] font-semibold tracking-[0.16px] text-[#525252]">Findings</span>
-      <span class="truncate py-4 pr-2 pl-1 text-[14px] leading-[18px] font-semibold tracking-[0.16px] text-[#525252]">Status</span>
+      <span class="min-w-0 truncate py-4 pr-2 pl-1 text-[14px] leading-[18px] font-semibold tracking-[0.16px] text-text-secondary">File path</span>
+      <span class="truncate py-4 pr-2 pl-1 text-[14px] leading-[18px] font-semibold tracking-[0.16px] text-text-secondary">Findings</span>
+      <span class="truncate py-4 pr-2 pl-1 text-[14px] leading-[18px] font-semibold tracking-[0.16px] text-text-secondary">Status</span>
     </div>
 
-    <div v-for="file in files" :key="file.filename" class="border-b border-[#e0e0e0]">
+    <div v-for="file in files" :key="file.filename" class="border-b border-text-primary/12">
       <div
         :class="[
           'grid min-w-fit items-center',
           GRID_COLS,
           isScanning(file.filename) ? 'opacity-50' : '',
-          selected.has(file.filename) ? 'bg-[#8d8d8d]/20' : 'bg-white hover:bg-[#f4f4f4]',
+          selected.has(file.filename) ? 'bg-text-tertiary/20' : 'bg-surface hover:bg-surface/50',
         ]"
       >
         <button
           type="button"
-          class="flex h-10 w-10 items-center justify-center rounded text-[#525252] outline-none hover:bg-[#e0e0e0] disabled:cursor-not-allowed disabled:hover:bg-transparent"
+          class="flex h-10 w-10 items-center justify-center rounded text-text-secondary outline-none hover:bg-text-primary/8 disabled:cursor-not-allowed disabled:hover:bg-transparent"
           :disabled="isScanning(file.filename)"
           :aria-expanded="openRows.has(file.filename)"
           :aria-label="openRows.has(file.filename) ? 'Collapse row' : 'Expand row'"
@@ -125,23 +125,23 @@ const allSelected = () =>
           @update:model-value="emit('toggle', file.filename, $event)"
         />
         <span class="flex min-w-0 items-center gap-3 py-3 pr-2 pl-1">
-          <Icon :name="fileIcon(file.filename)" class="shrink-0 text-[#525252]" />
+          <Icon :name="fileIcon(file.filename)" class="shrink-0 text-text-secondary" />
           <span
-            class="min-w-0 truncate text-[14px] leading-[18px] tracking-[0.16px] text-[#161616]"
+            class="min-w-0 truncate text-[14px] leading-[18px] tracking-[0.16px] text-text-primary"
             :title="file.filename"
           >
             {{ file.filename }}
           </span>
         </span>
-        <span class="py-3 pr-2 pl-1 text-[14px] leading-[18px] tracking-[0.16px] text-[#161616]">
+        <span class="py-3 pr-2 pl-1 text-[14px] leading-[18px] tracking-[0.16px] text-text-primary">
           {{ isScanning(file.filename) ? "—" : hasFindings(file) ? `${findingCount(file)} findings` : "No findings" }}
         </span>
         <span class="flex items-center gap-2 py-3 pr-2 pl-1 text-[14px] leading-[18px] tracking-[0.16px]">
           <Icon
             :name="isScanning(file.filename) ? 'hourglass' : 'checkmark-outline'"
-            :class="isScanning(file.filename) ? 'text-[#8d8d8d]' : 'text-[#198038]'"
+            :class="isScanning(file.filename) ? 'text-text-tertiary' : 'text-success'"
           />
-          <span :class="isScanning(file.filename) ? 'text-[#8d8d8d]' : 'text-[#161616]'">
+          <span :class="isScanning(file.filename) ? 'text-text-tertiary' : 'text-text-primary'">
             {{ isScanning(file.filename) ? "Scanning…" : "Reviewed" }}
           </span>
         </span>
@@ -149,12 +149,12 @@ const allSelected = () =>
 
       <div
         v-if="openRows.has(file.filename) && !isScanning(file.filename)"
-        class="border-l-4 border-[#1766d9] bg-[#f4f4f4] py-5 pr-6 pl-5"
+        class="border-l-4 border-text-primary/20 bg-neutral-bg py-5 pr-6 pl-5"
       >
-        <div v-if="hasFindings(file)" class="grid grid-cols-3 gap-6 bg-white p-4">
-          <div class="col-span-2 min-w-0">
-            <div class="flex items-center gap-2 border-b border-[#e0e0e0] px-4 py-[15px]">
-              <span class="text-[14px] leading-[18px] font-semibold tracking-[0.16px] text-[#161616]">
+        <div v-if="hasFindings(file)" class="grid grid-cols-3 gap-6 bg-surface p-4">
+          <div v-if="confirmedValues(file).length" class="col-span-2 min-w-0">
+            <div class="flex items-center gap-2 border-b border-text-primary/12 px-4 py-[15px]">
+              <span class="text-[14px] leading-[18px] font-semibold tracking-[0.16px] text-text-primary">
                 Confirmed values
               </span>
               <Tooltip text="Literal values found in this file and matched with high confidence">
@@ -165,16 +165,16 @@ const allSelected = () =>
               <li
                 v-for="item in confirmedValues(file)"
                 :key="item.key"
-                class="flex items-center gap-4 border-b border-[#e0e0e0] px-4 py-[14px] last:border-b-0"
+                class="flex items-center gap-4 border-b border-text-primary/12 px-4 py-[14px] last:border-b-0"
               >
-                <Icon :name="item.icon" class="shrink-0 text-[#525252]" />
-                <span class="min-w-0 flex-1 truncate font-mono text-[14px] leading-[20px] tracking-[0.16px] text-[#161616]">
+                <Icon :name="item.icon" class="shrink-0 text-text-secondary" />
+                <span class="min-w-0 flex-1 truncate font-mono text-[14px] leading-[20px] tracking-[0.16px] text-text-primary">
                   {{ revealedValues.has(item.key) ? item.value : maskValue(item.value) }}
                 </span>
-                <span class="flex shrink-0 items-center gap-2 text-[#525252]">
+                <span class="flex shrink-0 items-center gap-2 text-text-secondary">
                   <button
                     type="button"
-                    class="flex h-8 w-8 items-center justify-center rounded outline-none hover:bg-[#e0e0e0] hover:text-[#161616]"
+                    class="flex h-8 w-8 items-center justify-center rounded outline-none hover:bg-text-primary/8 hover:text-text-primary"
                     :aria-label="revealedValues.has(item.key) ? `Hide ${item.label.toLowerCase()}` : `Reveal ${item.label.toLowerCase()}`"
                     @click="toggleReveal(item.key)"
                   >
@@ -182,7 +182,7 @@ const allSelected = () =>
                   </button>
                   <button
                     type="button"
-                    class="flex h-8 w-8 items-center justify-center rounded outline-none hover:bg-[#e0e0e0] hover:text-[#161616]"
+                    class="flex h-8 w-8 items-center justify-center rounded outline-none hover:bg-text-primary/8 hover:text-text-primary"
                     :aria-label="`Copy ${item.label.toLowerCase()}`"
                     @click="copyValue(item.key, item.value)"
                   >
@@ -193,9 +193,9 @@ const allSelected = () =>
             </ul>
           </div>
 
-          <div v-if="file.other_piis.length" class="min-w-0">
+          <div v-if="file.other_piis.length" :class="confirmedValues(file).length ? 'min-w-0' : 'col-span-3 min-w-0'">
             <div class="flex items-center gap-2 py-[15px]">
-              <span class="text-[14px] leading-[18px] font-semibold tracking-[0.16px] text-[#161616]">
+              <span class="text-[14px] leading-[18px] font-semibold tracking-[0.16px] text-text-primary">
                 Detected categories
               </span>
               <Tooltip text="Categories inferred from keywords in this file; review before treating as confirmed">
@@ -206,16 +206,16 @@ const allSelected = () =>
               <span
                 v-for="tag in file.other_piis"
                 :key="tag"
-                class="rounded-full bg-[#dde1e6] px-3 py-1 text-[12px] leading-4 tracking-[0.32px] text-[#121619]"
+                class="rounded-full bg-text-primary/12 px-3 py-1 text-[12px] leading-4 tracking-[0.32px] text-text-primary"
               >
                 {{ tag }}
               </span>
             </div>
           </div>
         </div>
-        <div v-else class="flex flex-col items-center gap-2 bg-white px-4 py-10 text-center">
-          <Icon name="checkmark-outline" :size="24" class="text-[#198038]" />
-          <p class="text-[14px] leading-[18px] tracking-[0.16px] text-[#161616]">
+        <div v-else class="flex flex-col items-center gap-2 bg-surface px-4 py-10 text-center">
+          <Icon name="checkmark-outline" :size="24" class="text-success" />
+          <p class="text-[14px] leading-[18px] tracking-[0.16px] text-text-primary">
             No confirmed values or categories detected in this file
           </p>
         </div>

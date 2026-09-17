@@ -11,22 +11,39 @@ const props = defineProps<{
   state: StepState;
 }>();
 
+const emit = defineEmits<{
+  (e: "select"): void;
+}>();
+
+const clickable = computed(() => props.state === "completed");
+
+const statusLabel = computed(() => {
+  switch (props.state) {
+    case "completed":
+      return "Completed";
+    case "active":
+      return "Current step";
+    case "disabled":
+      return "Disabled";
+    default:
+      return "Upcoming";
+  }
+});
+
 const borderClass = computed(() =>
   props.state === "active" || props.state === "completed"
-    ? "border-blue-500"
-    : "border-neutral-300 dark:border-neutral-600",
+    ? "border-action-primary"
+    : "border-text-primary/20",
 );
 
 const iconClass = computed(() => {
-  if (props.state === "active" || props.state === "completed") return "text-blue-500";
-  if (props.state === "disabled") return "text-neutral-300 dark:text-neutral-600";
-  return "text-neutral-400 dark:text-neutral-500";
+  if (props.state === "active" || props.state === "completed") return "text-action-primary";
+  if (props.state === "disabled") return "text-text-primary/20";
+  return "text-text-primary/40";
 });
 
 const labelClass = computed(() =>
-  props.state === "disabled"
-    ? "text-neutral-400 dark:text-neutral-500"
-    : "text-neutral-900 dark:text-neutral-100",
+  props.state === "disabled" ? "text-text-primary/40" : "text-text-primary",
 );
 
 const icon = computed(() => {
@@ -34,22 +51,40 @@ const icon = computed(() => {
   if (props.state === "active") return iconStepActive;
   return iconStepUpcoming;
 });
+
+const headerAttrs = computed(() => {
+  const attrs: Record<string, string> = {};
+  if (clickable.value) attrs.type = "button";
+  if (props.state === "active") attrs["aria-current"] = "step";
+  if (props.state === "disabled") attrs["aria-disabled"] = "true";
+  return attrs;
+});
 </script>
 
 <template>
   <div
     class="flex flex-1 flex-col items-start gap-1 border-t-2 pt-2.5 pr-4 transition-colors duration-300"
     :class="borderClass"
+    role="listitem"
   >
-    <div class="flex items-center gap-2">
+    <component
+      :is="clickable ? 'button' : 'div'"
+      v-bind="headerAttrs"
+      class="flex items-center gap-2 rounded-sm"
+      :class="clickable ? 'cursor-pointer hover:opacity-80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-action-primary focus-visible:outline-offset-2' : ''"
+      @click="clickable && emit('select')"
+    >
       <Transition name="step-icon" mode="out-in">
-        <span :key="state" class="size-4 shrink-0" :class="iconClass" v-html="icon" />
+        <span :key="state" class="size-4 shrink-0" :class="iconClass" aria-hidden="true" v-html="icon" />
       </Transition>
-      <span class="text-sm font-medium whitespace-nowrap transition-colors duration-300" :class="labelClass">{{ label }}</span>
-    </div>
+      <span class="text-sm font-medium whitespace-nowrap transition-colors duration-300" :class="labelClass">
+        {{ label }}
+        <span class="sr-only">({{ statusLabel }})</span>
+      </span>
+    </component>
     <p
       v-if="description"
-      class="pl-6 text-xs text-neutral-500 dark:text-neutral-400"
+      class="pl-6 text-xs text-text-primary/60"
     >
       {{ description }}
     </p>

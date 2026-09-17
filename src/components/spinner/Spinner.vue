@@ -4,7 +4,7 @@ withDefaults(defineProps<{ size?: number }>(), { size: 16 });
 
 <template>
   <span
-    class="inline-block shrink-0 animate-spin rounded-full border-2 border-[#c6c6c6] border-t-[#4b5cda]"
+    class="inline-block shrink-0 animate-spin rounded-full border-2 border-text-primary/20 border-t-action-primary"
     :style="{ width: `${size}px`, height: `${size}px` }"
     role="status"
     aria-label="Scanning"
