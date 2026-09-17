@@ -2,6 +2,17 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+@layer base {
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]),
+  a,
+  label,
+  select,
+  summary {
+    cursor: pointer;
+  }
+}
+
 @theme {
   --color-neutral-bg: #f7f7f8;
   --color-surface: #ffffff;
