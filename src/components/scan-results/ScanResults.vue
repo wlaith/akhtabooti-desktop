@@ -24,9 +24,7 @@ const failedPaths = computed(() => Object.entries(props.pathErrors));
 
 function hasFindings(file: FilePIIs) {
   return (
-    file.email_accounts.length > 0 ||
-    file.phone_numbers.length > 0 ||
-    file.other_piis.length > 0
+    file.email_accounts.length > 0 || file.phone_numbers.length > 0 || file.other_piis.length > 0
   );
 }
 
@@ -38,13 +36,17 @@ const totalEmails = computed(() =>
 const totalPhones = computed(() =>
   visibleResults.value.reduce((sum, f) => sum + f.phone_numbers.length, 0),
 );
-const totalOther = computed(() =>
-  visibleResults.value.filter((f) => f.other_piis.length > 0).length,
+const totalOther = computed(
+  () => visibleResults.value.filter((f) => f.other_piis.length > 0).length,
 );
 const filesWithFindings = computed(() => visibleResults.value.filter(hasFindings));
 const filesWithNoFindings = computed(() => visibleResults.value.filter((f) => !hasFindings(f)));
-const filesWithEmail = computed(() => visibleResults.value.filter((f) => f.email_accounts.length > 0));
-const filesWithPhone = computed(() => visibleResults.value.filter((f) => f.phone_numbers.length > 0));
+const filesWithEmail = computed(() =>
+  visibleResults.value.filter((f) => f.email_accounts.length > 0),
+);
+const filesWithPhone = computed(() =>
+  visibleResults.value.filter((f) => f.phone_numbers.length > 0),
+);
 
 // --- Filters ---
 type StatusFilter = "all" | "has-findings" | "no-findings";
@@ -122,7 +124,10 @@ function clearSelection() {
 }
 
 async function exportSelected() {
-  const target = selected.size > 0 ? visibleResults.value.filter((f) => selected.has(f.filename)) : visibleResults.value;
+  const target =
+    selected.size > 0
+      ? visibleResults.value.filter((f) => selected.has(f.filename))
+      : visibleResults.value;
 
   await invoke<boolean>("export_report", { contents: JSON.stringify(target, null, 2) });
 }
@@ -169,54 +174,91 @@ async function exportSelected() {
     <div v-else class="flex flex-col md:flex-row">
       <aside class="flex shrink-0 flex-col gap-4 md:w-[282px] md:gap-6 md:pr-6">
         <div>
-          <h3 class="mb-2 text-[12px] leading-[16px] font-semibold tracking-[0.32px] text-text-secondary uppercase md:mb-3">
+          <h3
+            class="mb-2 text-[12px] leading-[16px] font-semibold tracking-[0.32px] text-text-secondary uppercase md:mb-3"
+          >
             Status
           </h3>
           <div class="flex flex-col gap-2 md:gap-4">
             <Tooltip wrap text="Show every scanned file">
-              <Checkbox :model-value="statusFilter === 'all'" @update:model-value="statusFilter = 'all'">
-                <span class="inline-flex items-center gap-1">All ({{ visibleResults.length }}) <Icon name="information" :size="12" class="text-text-secondary" /></span>
+              <Checkbox
+                :model-value="statusFilter === 'all'"
+                @update:model-value="statusFilter = 'all'"
+              >
+                <span class="inline-flex items-center gap-1"
+                  >All ({{ visibleResults.length }})
+                  <Icon name="information" :size="12" class="text-text-secondary"
+                /></span>
               </Checkbox>
             </Tooltip>
             <Tooltip wrap text="Show only files where PII was detected">
-              <Checkbox :model-value="statusFilter === 'has-findings'" @update:model-value="statusFilter = 'has-findings'">
-                <span class="inline-flex items-center gap-1">Has findings ({{ filesWithFindings.length }}) <Icon name="information" :size="12" class="text-text-secondary" /></span>
+              <Checkbox
+                :model-value="statusFilter === 'has-findings'"
+                @update:model-value="statusFilter = 'has-findings'"
+              >
+                <span class="inline-flex items-center gap-1"
+                  >Has findings ({{ filesWithFindings.length }})
+                  <Icon name="information" :size="12" class="text-text-secondary"
+                /></span>
               </Checkbox>
             </Tooltip>
             <Tooltip wrap text="Show only files with no PII detected">
-              <Checkbox :model-value="statusFilter === 'no-findings'" @update:model-value="statusFilter = 'no-findings'">
-                <span class="inline-flex items-center gap-1">No findings ({{ filesWithNoFindings.length }}) <Icon name="information" :size="12" class="text-text-secondary" /></span>
+              <Checkbox
+                :model-value="statusFilter === 'no-findings'"
+                @update:model-value="statusFilter = 'no-findings'"
+              >
+                <span class="inline-flex items-center gap-1"
+                  >No findings ({{ filesWithNoFindings.length }})
+                  <Icon name="information" :size="12" class="text-text-secondary"
+                /></span>
               </Checkbox>
             </Tooltip>
           </div>
         </div>
         <div>
-          <h3 class="mb-2 text-[12px] leading-[16px] font-semibold tracking-[0.32px] text-text-secondary uppercase md:mb-3">
+          <h3
+            class="mb-2 text-[12px] leading-[16px] font-semibold tracking-[0.32px] text-text-secondary uppercase md:mb-3"
+          >
             Category
           </h3>
           <div class="flex flex-col gap-2 md:gap-4">
             <Tooltip wrap text="Show files containing email addresses">
               <Checkbox v-model="categoryFilter.email">
-                <span class="inline-flex items-center gap-1">Email · {{ filesWithEmail.length }} files <Icon name="information" :size="12" class="text-text-secondary" /></span>
+                <span class="inline-flex items-center gap-1"
+                  >Email · {{ filesWithEmail.length }} files
+                  <Icon name="information" :size="12" class="text-text-secondary"
+                /></span>
               </Checkbox>
             </Tooltip>
             <Tooltip wrap text="Show files containing phone numbers">
               <Checkbox v-model="categoryFilter.phone">
-                <span class="inline-flex items-center gap-1">Phone numbers · {{ filesWithPhone.length }} files <Icon name="information" :size="12" class="text-text-secondary" /></span>
+                <span class="inline-flex items-center gap-1"
+                  >Phone numbers · {{ filesWithPhone.length }} files
+                  <Icon name="information" :size="12" class="text-text-secondary"
+                /></span>
               </Checkbox>
             </Tooltip>
             <Tooltip wrap text="Show files containing other detected PII">
               <Checkbox v-model="categoryFilter.other">
-                <span class="inline-flex items-center gap-1">Other · {{ totalOther }} files <Icon name="information" :size="12" class="text-text-secondary" /></span>
+                <span class="inline-flex items-center gap-1"
+                  >Other · {{ totalOther }} files
+                  <Icon name="information" :size="12" class="text-text-secondary"
+                /></span>
               </Checkbox>
             </Tooltip>
           </div>
         </div>
       </aside>
 
-      <div class="flex min-w-0 flex-1 flex-col gap-4 pb-8 md:border-l md:border-text-primary/12 md:pl-6">
+      <div
+        class="flex min-w-0 flex-1 flex-col gap-4 pb-8 md:border-l md:border-text-primary/12 md:pl-6"
+      >
         <div class="flex flex-wrap gap-3">
-          <SearchInput v-model="search" placeholder="Search by file path" class="min-w-[240px] flex-1" />
+          <SearchInput
+            v-model="search"
+            placeholder="Search by file path"
+            class="min-w-[240px] flex-1"
+          />
           <SortSelect v-model="sort" :options="sortOptions" />
         </div>
 

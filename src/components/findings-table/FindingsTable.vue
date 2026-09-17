@@ -23,7 +23,15 @@ const revealedValues = reactive(new Set<string>());
 const copiedValue = ref<string | null>(null);
 const GRID_COLS = "grid-cols-[40px_24px_minmax(0,1fr)_120px_130px] gap-3";
 
-const FILE_ICONS: Record<string, "document-pdf" | "document-doc" | "document-xls" | "document-html" | "document-json" | "document-txt"> = {
+const FILE_ICONS: Record<
+  string,
+  | "document-pdf"
+  | "document-doc"
+  | "document-xls"
+  | "document-html"
+  | "document-json"
+  | "document-txt"
+> = {
   pdf: "document-pdf",
   doc: "document-doc",
   docx: "document-doc",
@@ -51,16 +59,24 @@ function isScanning(filename: string) {
 
 function hasFindings(file: FilePIIs) {
   return (
-    file.email_accounts.length > 0 ||
-    file.phone_numbers.length > 0 ||
-    file.other_piis.length > 0
+    file.email_accounts.length > 0 || file.phone_numbers.length > 0 || file.other_piis.length > 0
   );
 }
 
 function confirmedValues(file: FilePIIs): ConfirmedValue[] {
   return [
-    ...file.email_accounts.map((value) => ({ key: `${file.filename}:email:${value}`, icon: "email-user" as const, label: "Email", value })),
-    ...file.phone_numbers.map((value) => ({ key: `${file.filename}:phone:${value}`, icon: "phone" as const, label: "Phone number", value })),
+    ...file.email_accounts.map((value) => ({
+      key: `${file.filename}:email:${value}`,
+      icon: "email-user" as const,
+      label: "Email",
+      value,
+    })),
+    ...file.phone_numbers.map((value) => ({
+      key: `${file.filename}:phone:${value}`,
+      icon: "phone" as const,
+      label: "Phone number",
+      value,
+    })),
   ];
 }
 
@@ -95,9 +111,18 @@ const allSelected = () =>
     <div :class="['sticky top-0 z-10 grid min-w-fit items-center bg-neutral-bg', GRID_COLS]">
       <span />
       <Checkbox :model-value="allSelected()" @update:model-value="emit('toggle-all', $event)" />
-      <span class="min-w-0 truncate py-4 pr-2 pl-1 text-[14px] leading-[18px] font-semibold tracking-[0.16px] text-text-secondary">File path</span>
-      <span class="truncate py-4 pr-2 pl-1 text-[14px] leading-[18px] font-semibold tracking-[0.16px] text-text-secondary">Findings</span>
-      <span class="truncate py-4 pr-2 pl-1 text-[14px] leading-[18px] font-semibold tracking-[0.16px] text-text-secondary">Status</span>
+      <span
+        class="min-w-0 truncate py-4 pr-2 pl-1 text-[14px] leading-[18px] font-semibold tracking-[0.16px] text-text-secondary"
+        >File path</span
+      >
+      <span
+        class="truncate py-4 pr-2 pl-1 text-[14px] leading-[18px] font-semibold tracking-[0.16px] text-text-secondary"
+        >Findings</span
+      >
+      <span
+        class="truncate py-4 pr-2 pl-1 text-[14px] leading-[18px] font-semibold tracking-[0.16px] text-text-secondary"
+        >Status</span
+      >
     </div>
 
     <div v-for="file in files" :key="file.filename" class="border-b border-text-primary/12">
@@ -134,9 +159,17 @@ const allSelected = () =>
           </span>
         </span>
         <span class="py-3 pr-2 pl-1 text-[14px] leading-[18px] tracking-[0.16px] text-text-primary">
-          {{ isScanning(file.filename) ? "—" : hasFindings(file) ? `${findingCount(file)} findings` : "No findings" }}
+          {{
+            isScanning(file.filename)
+              ? "—"
+              : hasFindings(file)
+                ? `${findingCount(file)} findings`
+                : "No findings"
+          }}
         </span>
-        <span class="flex items-center gap-2 py-3 pr-2 pl-1 text-[14px] leading-[18px] tracking-[0.16px]">
+        <span
+          class="flex items-center gap-2 py-3 pr-2 pl-1 text-[14px] leading-[18px] tracking-[0.16px]"
+        >
           <Icon
             :name="isScanning(file.filename) ? 'hourglass' : 'checkmark-outline'"
             :class="isScanning(file.filename) ? 'text-text-tertiary' : 'text-success'"
@@ -154,7 +187,9 @@ const allSelected = () =>
         <div v-if="hasFindings(file)" class="grid grid-cols-3 gap-6 bg-surface p-4">
           <div v-if="confirmedValues(file).length" class="col-span-2 min-w-0">
             <div class="flex items-center gap-2 border-b border-text-primary/12 px-4 py-[15px]">
-              <span class="text-[14px] leading-[18px] font-semibold tracking-[0.16px] text-text-primary">
+              <span
+                class="text-[14px] leading-[18px] font-semibold tracking-[0.16px] text-text-primary"
+              >
                 Confirmed values
               </span>
               <Tooltip text="Literal values found in this file and matched with high confidence">
@@ -168,14 +203,20 @@ const allSelected = () =>
                 class="flex items-center gap-4 border-b border-text-primary/12 px-4 py-[14px] last:border-b-0"
               >
                 <Icon :name="item.icon" class="shrink-0 text-text-secondary" />
-                <span class="min-w-0 flex-1 truncate font-mono text-[14px] leading-[20px] tracking-[0.16px] text-text-primary">
+                <span
+                  class="min-w-0 flex-1 truncate font-mono text-[14px] leading-[20px] tracking-[0.16px] text-text-primary"
+                >
                   {{ revealedValues.has(item.key) ? item.value : maskValue(item.value) }}
                 </span>
                 <span class="flex shrink-0 items-center gap-2 text-text-secondary">
                   <button
                     type="button"
                     class="flex h-8 w-8 items-center justify-center rounded outline-none hover:bg-text-primary/8 hover:text-text-primary"
-                    :aria-label="revealedValues.has(item.key) ? `Hide ${item.label.toLowerCase()}` : `Reveal ${item.label.toLowerCase()}`"
+                    :aria-label="
+                      revealedValues.has(item.key)
+                        ? `Hide ${item.label.toLowerCase()}`
+                        : `Reveal ${item.label.toLowerCase()}`
+                    "
                     @click="toggleReveal(item.key)"
                   >
                     <Icon :name="revealedValues.has(item.key) ? 'view-off' : 'view'" />
@@ -193,12 +234,19 @@ const allSelected = () =>
             </ul>
           </div>
 
-          <div v-if="file.other_piis.length" :class="confirmedValues(file).length ? 'min-w-0' : 'col-span-3 min-w-0'">
+          <div
+            v-if="file.other_piis.length"
+            :class="confirmedValues(file).length ? 'min-w-0' : 'col-span-3 min-w-0'"
+          >
             <div class="flex items-center gap-2 py-[15px]">
-              <span class="text-[14px] leading-[18px] font-semibold tracking-[0.16px] text-text-primary">
+              <span
+                class="text-[14px] leading-[18px] font-semibold tracking-[0.16px] text-text-primary"
+              >
                 Detected categories
               </span>
-              <Tooltip text="Categories inferred from keywords in this file; review before treating as confirmed">
+              <Tooltip
+                text="Categories inferred from keywords in this file; review before treating as confirmed"
+              >
                 <Icon name="information" :size="16" />
               </Tooltip>
             </div>

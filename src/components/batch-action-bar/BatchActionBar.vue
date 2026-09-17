@@ -10,7 +10,9 @@ defineEmits<{
 </script>
 
 <template>
-  <div class="sticky top-0 z-10 flex flex-wrap items-center gap-y-1 bg-action-primary text-text-inverse">
+  <div
+    class="sticky top-0 z-10 flex flex-wrap items-center gap-y-1 bg-action-primary text-text-inverse"
+  >
     <span class="flex-1 px-4 py-[15px] text-[14px] leading-[18px] tracking-[0.16px]">
       {{ count }} selected
     </span>

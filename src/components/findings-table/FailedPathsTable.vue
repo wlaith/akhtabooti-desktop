@@ -14,10 +14,14 @@ const openEntry = ref<[string, string] | null>(null);
   <div class="w-full overflow-x-auto">
     <div :class="['sticky top-0 z-10 grid min-w-fit items-center bg-neutral-bg', GRID_COLS]">
       <span />
-      <span class="min-w-0 truncate py-4 pr-2 pl-1 text-[14px] leading-[18px] font-semibold tracking-[0.16px] text-text-secondary">
+      <span
+        class="min-w-0 truncate py-4 pr-2 pl-1 text-[14px] leading-[18px] font-semibold tracking-[0.16px] text-text-secondary"
+      >
         Path
       </span>
-      <span class="truncate py-4 pr-2 pl-1 text-[14px] leading-[18px] font-semibold tracking-[0.16px] text-text-secondary">
+      <span
+        class="truncate py-4 pr-2 pl-1 text-[14px] leading-[18px] font-semibold tracking-[0.16px] text-text-secondary"
+      >
         Reason
       </span>
       <span />
@@ -44,7 +48,9 @@ const openEntry = ref<[string, string] | null>(null);
         {{ reason }}
       </span>
       <span class="py-3 pr-2 pl-1">
-        <Button variant="outline" size="small" @click="openEntry = [path, reason]">View error</Button>
+        <Button variant="outline" size="small" @click="openEntry = [path, reason]"
+          >View error</Button
+        >
       </span>
     </div>
 
