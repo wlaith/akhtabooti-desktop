@@ -140,9 +140,6 @@ async function exportSelected() {
     <div class="mb-6 flex flex-wrap items-start justify-between gap-6">
       <div>
         <h2 class="text-[28px] leading-[36px] font-semibold text-text-primary">Scan Report</h2>
-        <p class="mt-1 text-[13px] leading-[18px] text-text-secondary">
-          Scanned locally on this device · No data left this machine
-        </p>
       </div>
       <div class="flex shrink-0 gap-3">
         <Button variant="secondary" size="medium" @click="emit('rescan')">Re-scan</Button>
