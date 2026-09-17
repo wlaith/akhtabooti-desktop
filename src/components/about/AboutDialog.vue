@@ -1,11 +1,25 @@
 <script setup lang="ts">
+import { ref, onMounted } from "vue";
+import { getVersion } from "@tauri-apps/api/app";
+import { openUrl } from "@tauri-apps/plugin-opener";
 import Icon from "../icon/Icon.vue";
 
 defineEmits<{ (e: "close"): void }>();
+
+const ISSUES_URL = "https://github.com/wlaith/akhtabooti-desktop/issues";
+
+const version = ref("");
+
+onMounted(async () => {
+  version.value = await getVersion();
+});
 </script>
 
 <template>
-  <div class="fixed inset-0 z-30 flex items-center justify-center bg-black/40" @click.self="$emit('close')">
+  <div
+    class="fixed inset-0 z-30 flex items-center justify-center bg-black/40"
+    @click.self="$emit('close')"
+  >
     <div
       class="w-full max-w-[400px] bg-surface p-6 shadow-xl"
       role="dialog"
@@ -17,7 +31,7 @@ defineEmits<{ (e: "close"): void }>();
           <img src="/logo.png" alt="" class="h-8 w-8 object-contain" />
           <div>
             <h2 id="about-title" class="text-[18px] font-semibold text-text-primary">Akhtabooti</h2>
-            <p class="text-[13px] text-text-secondary">Version 0.1.0 (placeholder)</p>
+            <p v-if="version" class="text-[13px] text-text-secondary">Version {{ version }}</p>
           </div>
         </div>
         <button
@@ -31,17 +45,27 @@ defineEmits<{ (e: "close"): void }>();
       </div>
 
       <p class="mb-4 text-[14px] leading-[20px] text-text-primary">
-        Placeholder description: Akhtabooti scans local files and folders for personally
-        identifiable information (PII) such as email addresses and phone numbers.
+        Akhtabooti scans local files and folders for personally identifiable information such as
+        email addresses and phone numbers, so you know what personal data you are holding before you
+        share or archive it.
       </p>
 
-      <p class="mb-4 flex items-start gap-2 rounded bg-neutral-bg p-3 text-[13px] leading-[18px] text-text-primary">
-        🔒 Placeholder privacy statement: All scanning happens locally on this device.
-        No file contents or findings ever leave this machine.
+      <p
+        class="mb-4 flex items-start gap-2 rounded bg-neutral-bg p-3 text-[13px] leading-[18px] text-text-primary"
+      >
+        🔒 All scanning happens on this device. Akhtabooti makes no network requests — no file
+        contents and no findings ever leave this machine.
       </p>
 
       <p class="text-[12px] text-text-secondary">
-        Placeholder licence · © 2026 · <a href="#" class="text-action-primary underline">Report an issue</a>
+        Apache-2.0 · © 2026 JOSA ·
+        <button
+          type="button"
+          class="text-action-primary underline outline-none"
+          @click="openUrl(ISSUES_URL)"
+        >
+          Report an issue
+        </button>
       </p>
     </div>
   </div>

@@ -1,8 +1,22 @@
 {
   "name": "akhtabooti",
-  "private": true,
   "version": "0.1.0",
+  "private": true,
+  "description": "Desktop application that scans local files and folders for personally identifiable information, entirely offline.",
+  "license": "Apache-2.0",
+  "author": "Jordan Open Source Association (JOSA)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wlaith/akhtabooti-desktop.git"
+  },
+  "bugs": {
+    "url": "https://github.com/wlaith/akhtabooti-desktop/issues"
+  },
+  "homepage": "https://github.com/wlaith/akhtabooti-desktop#readme",
   "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
