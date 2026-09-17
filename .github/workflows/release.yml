@@ -2,34 +2,33 @@ name: Release
 
 on:
   push:
-    branches:
-      - release
+    tags: ["v*"]
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   publish-tauri:
+    permissions:
+      contents: write
     strategy:
       fail-fast: false
       matrix:
         include:
           - platform: macos-latest
-            args: ''
+            args: -- --locked
           - platform: ubuntu-22.04
-            args: --bundles deb,rpm
+            args: --bundles deb,rpm -- --locked
           - platform: windows-latest
-            args: ''
+            args: -- --locked
     runs-on: ${{ matrix.platform }}
     steps:
       - uses: actions/checkout@v4
 
-      - run: git config --global url."https://x-access-token:${{ secrets.CORE_REPO_TOKEN }}@github.com/".insteadOf "https://github.com/"
-
       - uses: actions/setup-node@v4
         with:
-          node-version: latest
+          node-version: 20
           cache: npm
 
       - uses: dtolnay/rust-toolchain@stable
@@ -58,8 +57,8 @@ jobs:
           APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
         with:
-          tagName: app-v__VERSION__
-          releaseName: 'App v__VERSION__'
+          tagName: ${{ github.ref_name }}
+          releaseName: Akhtabooti ${{ github.ref_name }}
           releaseDraft: true
           prerelease: false
           uploadWorkflowArtifacts: true
@@ -68,3 +67,36 @@ jobs:
       # Catches builds that run here but die at launch on any other Mac.
       - if: matrix.platform == 'macos-latest'
         run: sh src-tauri/scripts/verify-macos-bundle.sh
+
+  provenance:
+    needs: publish-tauri
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+      attestations: write
+    steps:
+      - name: Collect the published assets
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          mkdir -p release-assets
+          gh release download "${{ github.ref_name }}" \
+            --repo "$GITHUB_REPOSITORY" --dir release-assets
+
+      - name: Generate checksums
+        working-directory: release-assets
+        run: |
+          sha256sum * > SHA256SUMS
+          cat SHA256SUMS
+
+      - uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: release-assets/*
+
+      - name: Publish checksums
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release upload "${{ github.ref_name }}" release-assets/SHA256SUMS \
+            --repo "$GITHUB_REPOSITORY" --clobber
