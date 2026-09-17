@@ -77,9 +77,7 @@ function startScan() {
           or choose a specific file
         </button>
       </div>
-      <Button :disabled="disabled || paths.length === 0" @click="startScan">
-        Start scan
-      </Button>
+      <Button :disabled="disabled || paths.length === 0" @click="startScan"> Start scan </Button>
     </div>
   </section>
 </template>

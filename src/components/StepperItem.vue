@@ -71,21 +71,31 @@ const headerAttrs = computed(() => {
       :is="clickable ? 'button' : 'div'"
       v-bind="headerAttrs"
       class="flex items-center gap-2 rounded-sm"
-      :class="clickable ? 'cursor-pointer hover:opacity-80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-action-primary focus-visible:outline-offset-2' : ''"
+      :class="
+        clickable
+          ? 'cursor-pointer hover:opacity-80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-action-primary focus-visible:outline-offset-2'
+          : ''
+      "
       @click="clickable && emit('select')"
     >
       <Transition name="step-icon" mode="out-in">
-        <span :key="state" class="size-4 shrink-0" :class="iconClass" aria-hidden="true" v-html="icon" />
+        <span
+          :key="state"
+          class="size-4 shrink-0"
+          :class="iconClass"
+          aria-hidden="true"
+          v-html="icon"
+        />
       </Transition>
-      <span class="text-sm font-medium whitespace-nowrap transition-colors duration-300" :class="labelClass">
+      <span
+        class="text-sm font-medium whitespace-nowrap transition-colors duration-300"
+        :class="labelClass"
+      >
         {{ label }}
         <span class="sr-only">({{ statusLabel }})</span>
       </span>
     </component>
-    <p
-      v-if="description"
-      class="pl-6 text-xs text-text-primary/60"
-    >
+    <p v-if="description" class="pl-6 text-xs text-text-primary/60">
       {{ description }}
     </p>
   </div>

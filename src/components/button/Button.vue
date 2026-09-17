@@ -1,6 +1,10 @@
 <script setup lang="ts">
 withDefaults(
-  defineProps<{ variant?: "primary" | "secondary" | "outline"; size?: "small" | "medium" | "large"; disabled?: boolean }>(),
+  defineProps<{
+    variant?: "primary" | "secondary" | "outline";
+    size?: "small" | "medium" | "large";
+    disabled?: boolean;
+  }>(),
   { variant: "primary", size: "large", disabled: false },
 );
 </script>
@@ -12,7 +16,12 @@ withDefaults(
     :class="[
       size === 'small'
         ? ['gap-1', 'px-2.5 py-1 text-[12px] leading-[16px]']
-        : ['pl-4', $slots.icon ? 'pr-16' : 'pr-4', 'text-[14px] leading-[18px] tracking-[0.16px]', size === 'medium' ? 'py-[11px]' : 'py-[15px]'],
+        : [
+            'pl-4',
+            $slots.icon ? 'pr-16' : 'pr-4',
+            'text-[14px] leading-[18px] tracking-[0.16px]',
+            size === 'medium' ? 'py-[11px]' : 'py-[15px]',
+          ],
       variant === 'primary'
         ? 'bg-action-primary text-text-inverse hover:bg-action-primary-hover active:bg-action-primary-hover'
         : variant === 'secondary'
