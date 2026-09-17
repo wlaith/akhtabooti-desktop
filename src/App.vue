@@ -45,7 +45,7 @@ function handleStepSelect(index: number) {
 </script>
 
 <template>
-  <div class="flex h-screen w-screen overflow-hidden bg-white font-sans text-neutral-900">
+  <div class="flex h-screen w-screen overflow-hidden bg-neutral-bg font-sans text-text-primary">
     <Sidebar :active="view" @select="selectView" />
 
     <main class="min-w-0 flex-1 overflow-y-auto">
@@ -62,7 +62,7 @@ function handleStepSelect(index: number) {
 
         <ConfigureScan v-if="!scanning && !hasScanned" @start-scan="startScan" />
         <ScanProgress v-else-if="scanning" :path-status="pathStatus" />
-        <p v-else-if="error" class="mt-6 text-left text-red-600 dark:text-red-400">
+        <p v-else-if="error" class="mt-6 text-left text-error">
           {{ error }}
         </p>
         <ScanResults v-else-if="hasScanned" :results="results" @rescan="rescan" />

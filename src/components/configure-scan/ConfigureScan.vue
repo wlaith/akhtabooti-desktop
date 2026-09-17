@@ -37,7 +37,7 @@ function startScan() {
 
 <template>
   <section class="w-full text-left">
-    <h2 class="mb-6 text-[28px] font-semibold text-[#161616]">Configure Your Scan</h2>
+    <h2 class="mb-6 text-[28px] font-semibold text-text-primary">Configure Your Scan</h2>
 
     <List v-if="paths.length" title="Paths to be scanned">
       <template #title-action>
@@ -52,7 +52,7 @@ function startScan() {
           <button
             type="button"
             :disabled="disabled"
-            class="flex h-12 w-12 items-center justify-center text-[#525252] outline-none hover:bg-[#e8e8e8] hover:text-[#161616] disabled:cursor-not-allowed disabled:opacity-40"
+            class="flex h-12 w-12 items-center justify-center text-text-secondary outline-none hover:bg-text-primary/8 hover:text-text-primary disabled:cursor-not-allowed disabled:opacity-40"
             aria-label="Remove path"
             @click="removePath(path)"
           >
@@ -71,7 +71,7 @@ function startScan() {
         <button
           type="button"
           :disabled="disabled"
-          class="mt-2 block cursor-pointer text-[14px] tracking-[0.16px] text-[#4b5cda] underline outline-none hover:text-[#3a48b0] disabled:cursor-not-allowed disabled:opacity-40"
+          class="mt-2 block cursor-pointer text-[14px] tracking-[0.16px] text-action-primary underline outline-none hover:text-action-primary-hover disabled:cursor-not-allowed disabled:opacity-40"
           @click="addFiles"
         >
           or choose a specific file

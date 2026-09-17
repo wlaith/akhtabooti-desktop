@@ -28,8 +28,8 @@ const elapsedLabel = computed(() => {
 <template>
   <section class="w-full text-left">
     <div class="mb-6 flex items-center justify-between">
-      <h2 class="text-[28px] font-semibold text-[#161616]">Scanning your files…</h2>
-      <p class="text-[14px] text-[#525252]">Elapsed: {{ elapsedLabel }}</p>
+      <h2 class="text-[28px] font-semibold text-text-primary">Scanning your files…</h2>
+      <p class="text-[14px] text-text-secondary">Elapsed: {{ elapsedLabel }}</p>
     </div>
 
     <List title="Paths currently being scanned">
@@ -38,7 +38,7 @@ const elapsedLabel = computed(() => {
         <span class="break-all">{{ path }}</span>
         <template #actions>
           <Spinner v-if="pathStatus[path] === 'pending'" />
-          <Icon v-else name="checkmark-outline" class="text-green-600" />
+          <Icon v-else name="checkmark-outline" class="text-success" />
         </template>
       </ListItem>
     </List>

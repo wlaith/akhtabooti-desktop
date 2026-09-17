@@ -22,7 +22,7 @@ const open = ref(false);
     <button
       v-else
       type="button"
-      class="flex cursor-pointer items-center text-[#525252] outline-none hover:text-[#161616]"
+      class="flex cursor-pointer items-center text-text-secondary outline-none hover:text-text-primary"
       :aria-expanded="open"
       aria-label="More information"
       @click="open = !open"
@@ -32,7 +32,7 @@ const open = ref(false);
     <span
       v-if="open"
       role="tooltip"
-      class="absolute z-20 w-max max-w-[288px] text-left text-[12px] leading-[16px] text-white bg-[#393939] rounded px-3 py-2 shadow-lg"
+      class="absolute z-20 w-max max-w-[288px] text-left text-[12px] leading-[16px] text-text-inverse bg-text-primary rounded px-3 py-2 shadow-lg"
       :class="
         placement === 'right'
           ? 'top-1/2 left-full ml-2 -translate-y-1/2'

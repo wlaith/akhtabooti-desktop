@@ -26,10 +26,10 @@ const sections = [
 <template>
   <section class="flex h-full flex-col overflow-y-auto p-8 text-left">
     <div class="mb-6 flex items-start justify-between">
-      <h2 class="text-[24px] leading-[32px] font-semibold text-[#161616]">How to use Akhtabooti</h2>
+      <h2 class="text-[24px] leading-[32px] font-semibold text-text-primary">How to use Akhtabooti</h2>
       <button
         type="button"
-        class="flex h-8 w-8 items-center justify-center text-[#525252] outline-none hover:bg-[#e8e8e8] hover:text-[#161616]"
+        class="flex h-8 w-8 items-center justify-center text-text-secondary outline-none hover:bg-text-primary/8 hover:text-text-primary"
         aria-label="Back to scan"
         @click="$emit('close')"
       >
@@ -39,8 +39,8 @@ const sections = [
 
     <div class="flex max-w-[640px] flex-col gap-6">
       <div v-for="section in sections" :key="section.title">
-        <h3 class="mb-1 text-[16px] font-semibold text-[#161616]">{{ section.title }}</h3>
-        <p class="text-[14px] leading-[20px] text-[#525252]">{{ section.body }}</p>
+        <h3 class="mb-1 text-[16px] font-semibold text-text-primary">{{ section.title }}</h3>
+        <p class="text-[14px] leading-[20px] text-text-secondary">{{ section.body }}</p>
       </div>
     </div>
   </section>

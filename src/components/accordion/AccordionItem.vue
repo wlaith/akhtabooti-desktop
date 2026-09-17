@@ -10,12 +10,12 @@ const open = ref(false);
 </script>
 
 <template>
-  <div class="border-t border-[#c6c6c6]">
+  <div class="border-t border-text-primary/20">
     <button
       type="button"
       :disabled="disabled"
       class="flex w-full items-center gap-4 px-4 py-[14px] text-left outline-none disabled:cursor-not-allowed"
-      :class="disabled ? 'text-[rgba(22,22,22,0.25)]' : 'text-[#161616] hover:bg-[#e8e8e8]'"
+      :class="disabled ? 'text-text-primary/25' : 'text-text-primary hover:bg-text-primary/8'"
       :aria-expanded="open"
       @click="open = !open"
     >
@@ -24,7 +24,7 @@ const open = ref(false);
     </button>
     <div
       v-if="open && !disabled"
-      class="flex flex-col gap-4 pt-2 pr-12 pb-6 pl-4 text-[14px] leading-[20px] tracking-[0.16px] text-[#161616]"
+      class="flex flex-col gap-4 pt-2 pr-12 pb-6 pl-4 text-[14px] leading-[20px] tracking-[0.16px] text-text-primary"
     >
       <slot />
     </div>

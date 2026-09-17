@@ -15,7 +15,7 @@ const emit = defineEmits<{
 
 <template>
   <div>
-    <p class="mb-2 text-xs text-neutral-500 dark:text-neutral-400">
+    <p class="mb-2 text-xs text-text-primary/60">
       Step {{ currentIndex + 1 }} of {{ steps.length }}
     </p>
     <div class="flex w-full items-start" role="list">

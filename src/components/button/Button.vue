@@ -14,10 +14,10 @@ withDefaults(
         ? ['gap-1', 'px-2.5 py-1 text-[12px] leading-[16px]']
         : ['pl-4', $slots.icon ? 'pr-16' : 'pr-4', 'text-[14px] leading-[18px] tracking-[0.16px]', size === 'medium' ? 'py-[11px]' : 'py-[15px]'],
       variant === 'primary'
-        ? 'bg-[#4b5cda] text-white hover:bg-[#3a48b0] active:bg-[#2e3a8c]'
+        ? 'bg-action-primary text-text-inverse hover:bg-action-primary-hover active:bg-action-primary-hover'
         : variant === 'secondary'
           ? 'bg-[#393939] text-white hover:bg-[#4c4c4c] active:bg-[#6f6f6f]'
-          : 'border border-[#4b5cda] text-[#4b5cda] hover:bg-[#e8e8e8] active:bg-[#e0e0e0]',
+          : 'border border-action-primary text-action-primary hover:bg-text-primary/8 active:bg-text-primary/12',
     ]"
   >
     <slot v-if="$slots.icon && size === 'small'" name="icon" />
