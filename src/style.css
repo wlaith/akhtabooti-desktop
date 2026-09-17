@@ -1,1 +1,40 @@
 @import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]),
+  a,
+  label,
+  select,
+  summary {
+    cursor: pointer;
+  }
+}
+
+@theme {
+  --color-neutral-bg: #f7f7f8;
+  --color-surface: #ffffff;
+  --color-action-primary: #4e5cd2;
+  --color-action-primary-hover: #3e4ab8;
+  --color-text-inverse: #ffffff;
+  --color-text-primary: #393939;
+  --color-text-secondary: #525252;
+  --color-text-tertiary: #8d8d8d;
+  --color-success: #198038;
+  --color-error: #da1e28;
+}
+
+.dark {
+  --color-neutral-bg: #1e1e1f;
+  --color-surface: #393939;
+  --color-action-primary: #6fcce1;
+  --color-action-primary-hover: #5ab8ce;
+  --color-text-inverse: #393939;
+  --color-text-primary: #f2f2f2;
+  --color-text-secondary: #c6c6c6;
+  --color-text-tertiary: #a8a8a8;
+  --color-success: #42be65;
+  --color-error: #ff8389;
+}

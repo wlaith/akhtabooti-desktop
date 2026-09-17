@@ -1,0 +1,7 @@
+{
+  "bundle": {
+    "resources": {
+      "frameworks/libtika_native.dll": "libtika_native.dll"
+    }
+  }
+}

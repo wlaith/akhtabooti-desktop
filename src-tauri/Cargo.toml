@@ -16,6 +16,12 @@ crate-type = ["staticlib", "cdylib", "rlib"]
 
 [build-dependencies]
 tauri-build = { version = "2", features = [] }
+# Also a regular dependency. Duplicated here so Cargo runs our build script
+# after extractous' GraalVM build: tauri_build checks the frameworks paths in
+# tauri.conf.json exist, so libtika_native must be staged by then, and Cargo
+# only orders build scripts after build-dependencies. Costs a file copy, not a
+# second GraalVM compile — extractous reuses an already-built library.
+akhtabooti-core = { git = "https://github.com/wlaith/akhtabooti-core", branch = "main" }
 
 [dependencies]
 tauri = { version = "2", features = [] }
