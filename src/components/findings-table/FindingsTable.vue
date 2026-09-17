@@ -152,7 +152,7 @@ const allSelected = () =>
         class="border-l-4 border-text-primary/20 bg-neutral-bg py-5 pr-6 pl-5"
       >
         <div v-if="hasFindings(file)" class="grid grid-cols-3 gap-6 bg-surface p-4">
-          <div class="col-span-2 min-w-0">
+          <div v-if="confirmedValues(file).length" class="col-span-2 min-w-0">
             <div class="flex items-center gap-2 border-b border-text-primary/12 px-4 py-[15px]">
               <span class="text-[14px] leading-[18px] font-semibold tracking-[0.16px] text-text-primary">
                 Confirmed values
@@ -193,7 +193,7 @@ const allSelected = () =>
             </ul>
           </div>
 
-          <div v-if="file.other_piis.length" class="min-w-0">
+          <div v-if="file.other_piis.length" :class="confirmedValues(file).length ? 'min-w-0' : 'col-span-3 min-w-0'">
             <div class="flex items-center gap-2 py-[15px]">
               <span class="text-[14px] leading-[18px] font-semibold tracking-[0.16px] text-text-primary">
                 Detected categories
