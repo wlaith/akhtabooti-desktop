@@ -10,10 +10,13 @@ defineEmits<{ (e: "click"): void }>();
 </script>
 
 <template>
-  <div class="flex min-w-[180px] flex-1 flex-col gap-3 bg-[#f4f4f4] p-4 text-left">
+  <div
+    class="flex min-w-[180px] flex-1 flex-col gap-3 border bg-surface p-4 text-left"
+    :class="active ? 'border-action-primary' : 'border-text-primary/12'"
+  >
     <div>
-      <span class="text-[28px] leading-[36px] font-normal text-[#161616]">{{ value }}</span>
-      <span class="block text-[14px] leading-[18px] tracking-[0.16px] text-[#161616]">{{ label }}</span>
+      <span class="text-[28px] leading-[36px] font-normal text-text-primary">{{ value }}</span>
+      <span class="block text-[14px] leading-[18px] tracking-[0.16px] text-text-primary">{{ label }}</span>
     </div>
     <Button v-if="clickable" :variant="active ? 'primary' : 'outline'" size="small" class="self-start" @click="$emit('click')">
       {{ active ? "Remove filter" : "Apply filter" }}
