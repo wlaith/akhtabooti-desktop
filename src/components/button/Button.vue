@@ -1,6 +1,10 @@
 <script setup lang="ts">
 withDefaults(
-  defineProps<{ variant?: "primary" | "secondary" | "outline"; size?: "small" | "medium" | "large"; disabled?: boolean }>(),
+  defineProps<{
+    variant?: "primary" | "secondary" | "outline";
+    size?: "small" | "medium" | "large";
+    disabled?: boolean;
+  }>(),
   { variant: "primary", size: "large", disabled: false },
 );
 </script>

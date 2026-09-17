@@ -44,5 +44,16 @@ export function useStepper(steps: StepDefinition[], initialIndex = 0) {
     if (!isFirst.value) goTo(currentIndex.value - 1);
   }
 
-  return { currentIndex, currentStep, isFirst, isLast, stateOf, goTo, next, prev, complete, clearCompleted };
+  return {
+    currentIndex,
+    currentStep,
+    isFirst,
+    isLast,
+    stateOf,
+    goTo,
+    next,
+    prev,
+    complete,
+    clearCompleted,
+  };
 }

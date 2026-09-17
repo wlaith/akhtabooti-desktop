@@ -3,10 +3,13 @@ import { useI18n } from "vue-i18n";
 import Button from "../button/Button.vue";
 import Icon from "../icon/Icon.vue";
 
-withDefaults(defineProps<{ label: string; value: number | string; clickable?: boolean; active?: boolean }>(), {
-  clickable: false,
-  active: false,
-});
+withDefaults(
+  defineProps<{ label: string; value: number | string; clickable?: boolean; active?: boolean }>(),
+  {
+    clickable: false,
+    active: false,
+  },
+);
 defineEmits<{ (e: "click"): void }>();
 
 const { t } = useI18n();
@@ -19,7 +22,9 @@ const { t } = useI18n();
   >
     <div>
       <span class="text-[28px] leading-[36px] font-normal text-text-primary">{{ value }}</span>
-      <span class="block text-[14px] leading-[18px] tracking-[0.16px] text-text-primary">{{ label }}</span>
+      <span class="block text-[14px] leading-[18px] tracking-[0.16px] text-text-primary">{{
+        label
+      }}</span>
     </div>
     <Button v-if="clickable" :variant="active ? 'primary' : 'outline'" size="small" class="self-start" @click="$emit('click')">
       {{ active ? t("statTile.removeFilter") : t("statTile.applyFilter") }}
