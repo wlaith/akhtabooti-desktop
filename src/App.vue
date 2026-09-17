@@ -14,7 +14,8 @@ import AboutDialog from "./components/about/AboutDialog.vue";
 const steps = [{ label: "Configure" }, { label: "Scan" }, { label: "Results" }];
 const stepper = useStepper(steps);
 const { currentIndex } = stepper;
-const { results, pathStatus, pathErrors, scanning, allFailed, hasScanned, scan, reset } = useScan();
+const { results, pathStatus, pathErrors, scanning, allFailed, hasScanned, scan, cancelScan, reset } =
+  useScan();
 
 const view = ref<"scan" | "guide">("scan");
 const aboutOpen = ref(false);
@@ -30,12 +31,19 @@ function selectView(target: "scan" | "guide" | "about") {
 async function startScan(paths: string[]) {
   stepper.goTo(1);
   await scan(paths);
+  if (!hasScanned.value) return;
   stepper.goTo(2);
   stepper.complete(2);
 }
 
 function rescan() {
   reset();
+  stepper.clearCompleted();
+  stepper.goTo(0);
+}
+
+function handleCancelScan() {
+  cancelScan();
   stepper.clearCompleted();
   stepper.goTo(0);
 }
@@ -62,7 +70,11 @@ function handleStepSelect(index: number) {
         />
 
         <ConfigureScan v-if="!scanning && !hasScanned" @start-scan="startScan" />
-        <ScanProgress v-else-if="scanning" :path-status="pathStatus" />
+        <ScanProgress
+          v-else-if="scanning"
+          :path-status="pathStatus"
+          @cancel="handleCancelScan"
+        />
         <ErrorState v-else-if="allFailed" :detail="Object.values(pathErrors)[0]" @retry="rescan" />
         <ScanResults
           v-else-if="hasScanned"
