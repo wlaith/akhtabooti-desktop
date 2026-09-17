@@ -37,7 +37,6 @@
     "macOS": {
       "frameworks": ["frameworks/libtika_native.dylib"],
       "minimumSystemVersion": "10.15",
-      "signingIdentity": "-",
       "entitlements": "entitlements.plist"
     },
     "linux": {
