@@ -124,7 +124,7 @@
       },
       {
         "title": "2. Run the scan",
-        "body": "Start the scan and watch progress for each path. Scanning happens entirely on this device — nothing is uploaded. You can cancel at any point without leaving anything behind."
+        "body": "Start the scan and watch progress for each path. Scanning happens entirely on this device, nothing is uploaded. You can cancel at any point without leaving anything behind."
       },
       {
         "title": "3. Review findings",
@@ -132,7 +132,7 @@
       },
       {
         "title": "4. Export a report",
-        "body": "Export the selected findings — or all of them — as a JSON report you can share with your team or keep for your records. You choose where it is saved."
+        "body": "Export the selected findings, or all of them, as a JSON report you can share with your team or keep for your records. You choose where it is saved."
       }
     ]
   },
@@ -141,7 +141,7 @@
     "version": "Version {version}",
     "close": "Close",
     "description": "Akhtabooti scans local files and folders for personally identifiable information such as email addresses and phone numbers, so you know what personal data you are holding before you share or archive it.",
-    "privacy": "🔒 All scanning happens on this device. Akhtabooti makes no network requests — no file contents and no findings ever leave this machine.",
+    "privacy": "🔒 All scanning happens on this device. Akhtabooti makes no network requests. No file contents or findings ever leave this machine.",
     "licence": "Apache-2.0 · © 2026 JOSA ·",
     "reportIssue": "Report an issue"
   }
