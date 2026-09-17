@@ -102,8 +102,23 @@ else
 fi
 rm -f "$launch_log"
 
+echo "[6] notarization ticket is stapled"
+if xcrun stapler validate "$APP" >/dev/null 2>&1; then
+    note "ok - notarization ticket stapled"
+else
+    bad "no notarization ticket stapled; macOS will refuse this on a user's machine
+        (sign with a Developer ID, notarize, then staple)"
+fi
+
+echo "[7] Gatekeeper accepts the app"
+assessment=$(spctl -a -t exec -vv "$APP" 2>&1 || true)
+case "$assessment" in
+    *accepted*) note "ok - $(echo "$assessment" | grep -i 'source=' | head -1)" ;;
+    *) bad "Gatekeeper rejects this bundle: $(echo "$assessment" | head -1)" ;;
+esac
+
 if [ "$fail" -ne 0 ]; then
-    echo "verify-macos-bundle: FAILED — this build will crash on another Mac" >&2
+    echo "verify-macos-bundle: FAILED — this build will not run for your users" >&2
     exit 1
 fi
 echo "verify-macos-bundle: PASSED"
