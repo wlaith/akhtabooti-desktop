@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { computed, reactive, ref } from "vue";
 import { invoke } from "@tauri-apps/api/core";
-import { save } from "@tauri-apps/plugin-dialog";
 import type { FilePIIs } from "../../composables/useScan";
 import List from "../list/List.vue";
 import StatTile from "../stat-tile/StatTile.vue";
@@ -125,13 +124,7 @@ function clearSelection() {
 async function exportSelected() {
   const target = selected.size > 0 ? visibleResults.value.filter((f) => selected.has(f.filename)) : visibleResults.value;
 
-  const path = await save({
-    defaultPath: "scan-report.json",
-    filters: [{ name: "JSON", extensions: ["json"] }],
-  });
-  if (!path) return;
-
-  await invoke("write_file", { path, contents: JSON.stringify(target, null, 2) });
+  await invoke<boolean>("export_report", { contents: JSON.stringify(target, null, 2) });
 }
 </script>
 
