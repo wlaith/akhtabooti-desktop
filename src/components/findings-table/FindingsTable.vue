@@ -106,7 +106,7 @@ const allSelected = () =>
           'grid min-w-fit items-center',
           GRID_COLS,
           isScanning(file.filename) ? 'opacity-50' : '',
-          selected.has(file.filename) ? 'bg-text-tertiary/20' : 'bg-surface hover:bg-neutral-bg',
+          selected.has(file.filename) ? 'bg-text-tertiary/20' : 'bg-surface hover:bg-surface/50',
         ]"
       >
         <button
