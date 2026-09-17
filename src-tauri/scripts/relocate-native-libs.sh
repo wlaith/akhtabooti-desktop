@@ -98,6 +98,18 @@ Linux)
     echo "relocate-native-libs: $BIN -> $LIB (rpath $RPATH)"
     ;;
 
+MINGW*|MSYS*|CYGWIN*)
+      LIB=libtika_native.dll
+
+    src="$STAGE_DIR/$LIB"
+    [ -f "$src" ] || src=$(find_lib_in_build_dirs "$LIB")
+    [ -n "$src" ] && [ -f "$src" ] || { echo "relocate-native-libs: cannot locate $LIB" >&2; exit 1; }
+
+    mkdir -p "$STAGE_DIR"
+    [ "$src" = "$STAGE_DIR/$LIB" ] || cp -f "$src" "$STAGE_DIR/$LIB"
+    echo "relocate-native-libs: staged $STAGE_DIR/$LIB"
+    ;;
+
 *)
     exit 0
     ;;
