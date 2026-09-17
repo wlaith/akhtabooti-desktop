@@ -25,6 +25,7 @@ fn stage_tika_lib() {
     let lib_name = match target_os.as_str() {
         "macos" => "libtika_native.dylib",
         "linux" => "libtika_native.so",
+        "windows" => "libtika_native.dll",
         _ => return,
     };
 
