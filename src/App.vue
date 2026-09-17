@@ -6,6 +6,7 @@ import Stepper from "./components/Stepper.vue";
 import ConfigureScan from "./components/configure-scan/ConfigureScan.vue";
 import ScanProgress from "./components/scan-progress/ScanProgress.vue";
 import ScanResults from "./components/scan-results/ScanResults.vue";
+import ErrorState from "./components/error-state/ErrorState.vue";
 import Sidebar from "./components/sidebar/Sidebar.vue";
 import GuideView from "./components/guide/GuideView.vue";
 import AboutDialog from "./components/about/AboutDialog.vue";
@@ -13,7 +14,7 @@ import AboutDialog from "./components/about/AboutDialog.vue";
 const steps = [{ label: "Configure" }, { label: "Scan" }, { label: "Results" }];
 const stepper = useStepper(steps);
 const { currentIndex } = stepper;
-const { results, pathStatus, scanning, error, hasScanned, scan, reset } = useScan();
+const { results, pathStatus, pathErrors, scanning, allFailed, hasScanned, scan, reset } = useScan();
 
 const view = ref<"scan" | "guide">("scan");
 const aboutOpen = ref(false);
@@ -62,10 +63,13 @@ function handleStepSelect(index: number) {
 
         <ConfigureScan v-if="!scanning && !hasScanned" @start-scan="startScan" />
         <ScanProgress v-else-if="scanning" :path-status="pathStatus" />
-        <p v-else-if="error" class="mt-6 text-left text-error">
-          {{ error }}
-        </p>
-        <ScanResults v-else-if="hasScanned" :results="results" @rescan="rescan" />
+        <ErrorState v-else-if="allFailed" :detail="Object.values(pathErrors)[0]" @retry="rescan" />
+        <ScanResults
+          v-else-if="hasScanned"
+          :results="results"
+          :path-errors="pathErrors"
+          @rescan="rescan"
+        />
       </div>
     </main>
 

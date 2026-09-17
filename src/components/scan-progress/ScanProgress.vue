@@ -38,6 +38,7 @@ const elapsedLabel = computed(() => {
         <span class="break-all">{{ path }}</span>
         <template #actions>
           <Spinner v-if="pathStatus[path] === 'pending'" />
+          <Icon v-else-if="pathStatus[path] === 'error'" name="subtract-alt" class="text-error" />
           <Icon v-else name="checkmark-outline" class="text-success" />
         </template>
       </ListItem>

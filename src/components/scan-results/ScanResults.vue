@@ -13,9 +13,15 @@ import SearchInput from "../search-input/SearchInput.vue";
 import SortSelect, { type SortOption } from "../sort-select/SortSelect.vue";
 import BatchActionBar from "../batch-action-bar/BatchActionBar.vue";
 import FindingsTable from "../findings-table/FindingsTable.vue";
+import FailedPathsTable from "../findings-table/FailedPathsTable.vue";
 
-const props = defineProps<{ results: FilePIIs[] }>();
+const props = withDefaults(
+  defineProps<{ results: FilePIIs[]; pathErrors?: Record<string, string> }>(),
+  { pathErrors: () => ({}) },
+);
 const emit = defineEmits<{ (e: "rescan"): void }>();
+
+const failedPaths = computed(() => Object.entries(props.pathErrors));
 
 function hasFindings(file: FilePIIs) {
   return (
@@ -241,6 +247,10 @@ async function exportSelected() {
             @toggle="toggleSelected"
             @toggle-all="toggleAllSelected"
           />
+        </List>
+
+        <List v-if="failedPaths.length > 0" :title="`Couldn't be scanned (${failedPaths.length})`">
+          <FailedPathsTable :entries="failedPaths" />
         </List>
       </div>
     </div>
