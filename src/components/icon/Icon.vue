@@ -24,6 +24,8 @@ import helpRaw from "../../assets/icons/help.svg?raw";
 import closeRaw from "../../assets/icons/close.svg?raw";
 import filterRaw from "../../assets/icons/filter.svg?raw";
 import filterRemoveRaw from "../../assets/icons/filter--remove.svg?raw";
+import sunRaw from "../../assets/icons/sun.svg?raw";
+import moonRaw from "../../assets/icons/moon.svg?raw";
 
 type IconName =
   | "folder"
@@ -50,7 +52,9 @@ type IconName =
   | "help"
   | "close"
   | "filter"
-  | "filter-remove";
+  | "filter-remove"
+  | "sun"
+  | "moon";
 
 const props = withDefaults(defineProps<{ name: IconName; size?: number }>(), {
   size: 16,
@@ -108,6 +112,8 @@ const icons: Record<IconName, { viewBox: string; body: string }> = {
   close: parseIcon(closeRaw),
   filter: parseIcon(filterRaw),
   "filter-remove": parseIcon(filterRemoveRaw),
+  sun: parseIcon(sunRaw),
+  moon: parseIcon(moonRaw),
 };
 </script>
 
