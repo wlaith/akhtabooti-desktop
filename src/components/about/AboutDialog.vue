@@ -1,13 +1,27 @@
 <script setup lang="ts">
+import { ref, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
+import { getVersion } from "@tauri-apps/api/app";
+import { openUrl } from "@tauri-apps/plugin-opener";
 import Icon from "../icon/Icon.vue";
 
 defineEmits<{ (e: "close"): void }>();
 const { t } = useI18n();
+
+const ISSUES_URL = "https://github.com/wlaith/akhtabooti-desktop/issues";
+
+const version = ref("");
+
+onMounted(async () => {
+  version.value = await getVersion();
+});
 </script>
 
 <template>
-  <div class="fixed inset-0 z-30 flex items-center justify-center bg-black/40" @click.self="$emit('close')">
+  <div
+    class="fixed inset-0 z-30 flex items-center justify-center bg-black/40"
+    @click.self="$emit('close')"
+  >
     <div
       class="w-full max-w-[400px] bg-surface p-6 shadow-xl"
       role="dialog"
@@ -19,7 +33,7 @@ const { t } = useI18n();
           <img src="/logo.png" alt="" class="h-8 w-8 object-contain" />
           <div>
             <h2 id="about-title" class="text-[18px] font-semibold text-text-primary">{{ t("aboutDialog.title") }}</h2>
-            <p class="text-[13px] text-text-secondary">{{ t("aboutDialog.version") }}</p>
+            <p v-if="version" class="text-[13px] text-text-secondary">{{ t("aboutDialog.version", { version }) }}</p>
           </div>
         </div>
         <button
@@ -41,7 +55,14 @@ const { t } = useI18n();
       </p>
 
       <p class="text-[12px] text-text-secondary">
-        {{ t("aboutDialog.licence") }} <a href="#" class="text-action-primary underline">{{ t("aboutDialog.reportIssue") }}</a>
+        {{ t("aboutDialog.licence") }}
+        <button
+          type="button"
+          class="text-action-primary underline outline-none"
+          @click="openUrl(ISSUES_URL)"
+        >
+          {{ t("aboutDialog.reportIssue") }}
+        </button>
       </p>
     </div>
   </div>
