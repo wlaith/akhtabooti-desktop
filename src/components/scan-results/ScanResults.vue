@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, reactive, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import { invoke } from "@tauri-apps/api/core";
 import { save } from "@tauri-apps/plugin-dialog";
 import type { FilePIIs } from "../../composables/useScan";
@@ -21,6 +22,7 @@ const props = withDefaults(
 );
 const emit = defineEmits<{ (e: "rescan"): void }>();
 
+const { t } = useI18n();
 const failedPaths = computed(() => Object.entries(props.pathErrors));
 
 function hasFindings(file: FilePIIs) {
@@ -77,12 +79,12 @@ function findingCount(file: FilePIIs) {
   return file.email_accounts.length + file.phone_numbers.length + file.other_piis.length;
 }
 
-const sortOptions: { value: SortOption; label: string }[] = [
-  { value: "most", label: "Most findings" },
-  { value: "fewest", label: "Fewest findings" },
-  { value: "az", label: "A-Z" },
-  { value: "za", label: "Z-A" },
-];
+const sortOptions = computed<{ value: SortOption; label: string }[]>(() => [
+  { value: "most", label: t("scanResults.sortMost") },
+  { value: "fewest", label: t("scanResults.sortFewest") },
+  { value: "az", label: t("scanResults.sortAz") },
+  { value: "za", label: t("scanResults.sortZa") },
+]);
 
 const filteredResults = computed(() => {
   const term = search.value.trim().toLowerCase();
@@ -136,35 +138,35 @@ async function exportSelected() {
 </script>
 
 <template>
-  <section class="w-full text-left">
+  <section class="w-full">
     <div class="mb-6 flex flex-wrap items-start justify-between gap-6">
       <div>
-        <h2 class="text-[28px] leading-[36px] font-semibold text-text-primary">Scan Report</h2>
+        <h2 class="text-[28px] leading-[36px] font-semibold text-text-primary">{{ t("scanResults.title") }}</h2>
       </div>
       <div class="flex shrink-0 gap-3">
-        <Button variant="secondary" size="medium" @click="emit('rescan')">Re-scan</Button>
-        <Button size="medium" @click="exportSelected">Export report</Button>
+        <Button variant="secondary" size="medium" @click="emit('rescan')">{{ t("scanResults.rescan") }}</Button>
+        <Button size="medium" @click="exportSelected">{{ t("scanResults.exportReport") }}</Button>
       </div>
     </div>
 
     <div class="mb-6 flex flex-wrap gap-4">
-      <StatTile label="Paths scanned" :value="results.length" />
+      <StatTile :label="t('scanResults.statPathsScanned')" :value="results.length" />
       <StatTile
-        label="Files with findings"
+        :label="t('scanResults.statFilesWithFindings')"
         :value="filesWithFindings.length"
         clickable
         :active="statusFilter === 'has-findings'"
         @click="statusFilter = statusFilter === 'has-findings' ? 'all' : 'has-findings'"
       />
       <StatTile
-        label="Emails found"
+        :label="t('scanResults.statEmailsFound')"
         :value="totalEmails"
         clickable
         :active="categoryFilter.email"
         @click="toggleCategory('email')"
       />
       <StatTile
-        label="Phone numbers found"
+        :label="t('scanResults.statPhoneNumbersFound')"
         :value="totalPhones"
         clickable
         :active="categoryFilter.phone"
@@ -172,58 +174,58 @@ async function exportSelected() {
       />
     </div>
 
-    <p v-if="results.length === 0" class="text-text-secondary">No files found.</p>
+    <p v-if="results.length === 0" class="text-text-secondary">{{ t("scanResults.noFilesFound") }}</p>
     <div v-else class="flex flex-col md:flex-row">
-      <aside class="flex shrink-0 flex-col gap-4 md:w-[282px] md:gap-6 md:pr-6">
+      <aside class="flex shrink-0 flex-col gap-4 md:w-[282px] md:gap-6 md:pe-6">
         <div>
           <h3 class="mb-2 text-[12px] leading-[16px] font-semibold tracking-[0.32px] text-text-secondary uppercase md:mb-3">
-            Status
+            {{ t("scanResults.status") }}
           </h3>
           <div class="flex flex-col gap-2 md:gap-4">
-            <Tooltip wrap text="Show every scanned file">
+            <Tooltip wrap :text="t('scanResults.statusAllTooltip')">
               <Checkbox :model-value="statusFilter === 'all'" @update:model-value="statusFilter = 'all'">
-                <span class="inline-flex items-center gap-1">All ({{ visibleResults.length }}) <Icon name="information" :size="12" class="text-text-secondary" /></span>
+                <span class="inline-flex items-center gap-1">{{ t("scanResults.statusAll", { count: visibleResults.length }) }} <Icon name="information" :size="12" class="text-text-secondary" /></span>
               </Checkbox>
             </Tooltip>
-            <Tooltip wrap text="Show only files where PII was detected">
+            <Tooltip wrap :text="t('scanResults.statusHasFindingsTooltip')">
               <Checkbox :model-value="statusFilter === 'has-findings'" @update:model-value="statusFilter = 'has-findings'">
-                <span class="inline-flex items-center gap-1">Has findings ({{ filesWithFindings.length }}) <Icon name="information" :size="12" class="text-text-secondary" /></span>
+                <span class="inline-flex items-center gap-1">{{ t("scanResults.statusHasFindings", { count: filesWithFindings.length }) }} <Icon name="information" :size="12" class="text-text-secondary" /></span>
               </Checkbox>
             </Tooltip>
-            <Tooltip wrap text="Show only files with no PII detected">
+            <Tooltip wrap :text="t('scanResults.statusNoFindingsTooltip')">
               <Checkbox :model-value="statusFilter === 'no-findings'" @update:model-value="statusFilter = 'no-findings'">
-                <span class="inline-flex items-center gap-1">No findings ({{ filesWithNoFindings.length }}) <Icon name="information" :size="12" class="text-text-secondary" /></span>
+                <span class="inline-flex items-center gap-1">{{ t("scanResults.statusNoFindings", { count: filesWithNoFindings.length }) }} <Icon name="information" :size="12" class="text-text-secondary" /></span>
               </Checkbox>
             </Tooltip>
           </div>
         </div>
         <div>
           <h3 class="mb-2 text-[12px] leading-[16px] font-semibold tracking-[0.32px] text-text-secondary uppercase md:mb-3">
-            Category
+            {{ t("scanResults.category") }}
           </h3>
           <div class="flex flex-col gap-2 md:gap-4">
-            <Tooltip wrap text="Show files containing email addresses">
+            <Tooltip wrap :text="t('scanResults.categoryEmailTooltip')">
               <Checkbox v-model="categoryFilter.email">
-                <span class="inline-flex items-center gap-1">Email · {{ filesWithEmail.length }} files <Icon name="information" :size="12" class="text-text-secondary" /></span>
+                <span class="inline-flex items-center gap-1">{{ t("scanResults.categoryEmail", { count: filesWithEmail.length }) }} <Icon name="information" :size="12" class="text-text-secondary" /></span>
               </Checkbox>
             </Tooltip>
-            <Tooltip wrap text="Show files containing phone numbers">
+            <Tooltip wrap :text="t('scanResults.categoryPhoneTooltip')">
               <Checkbox v-model="categoryFilter.phone">
-                <span class="inline-flex items-center gap-1">Phone numbers · {{ filesWithPhone.length }} files <Icon name="information" :size="12" class="text-text-secondary" /></span>
+                <span class="inline-flex items-center gap-1">{{ t("scanResults.categoryPhone", { count: filesWithPhone.length }) }} <Icon name="information" :size="12" class="text-text-secondary" /></span>
               </Checkbox>
             </Tooltip>
-            <Tooltip wrap text="Show files containing other detected PII">
+            <Tooltip wrap :text="t('scanResults.categoryOtherTooltip')">
               <Checkbox v-model="categoryFilter.other">
-                <span class="inline-flex items-center gap-1">Other · {{ totalOther }} files <Icon name="information" :size="12" class="text-text-secondary" /></span>
+                <span class="inline-flex items-center gap-1">{{ t("scanResults.categoryOther", { count: totalOther }) }} <Icon name="information" :size="12" class="text-text-secondary" /></span>
               </Checkbox>
             </Tooltip>
           </div>
         </div>
       </aside>
 
-      <div class="flex min-w-0 flex-1 flex-col gap-4 pb-8 md:border-l md:border-text-primary/12 md:pl-6">
+      <div class="flex min-w-0 flex-1 flex-col gap-4 pb-8 md:border-s md:border-text-primary/12 md:ps-6">
         <div class="flex flex-wrap gap-3">
-          <SearchInput v-model="search" placeholder="Search by file path" class="min-w-[240px] flex-1" />
+          <SearchInput v-model="search" :placeholder="t('scanResults.searchPlaceholder')" class="min-w-[240px] flex-1" />
           <SortSelect v-model="sort" :options="sortOptions" />
         </div>
 
@@ -235,9 +237,9 @@ async function exportSelected() {
         />
 
         <p v-if="filteredResults.length === 0" class="text-text-secondary">
-          No files match these filters.
+          {{ t("scanResults.noFilesMatch") }}
         </p>
-        <List v-else title="Findings">
+        <List v-else :title="t('scanResults.findings')">
           <FindingsTable
             :files="filteredResults"
             :selected="selected"
@@ -246,7 +248,7 @@ async function exportSelected() {
           />
         </List>
 
-        <List v-if="failedPaths.length > 0" :title="`Couldn't be scanned (${failedPaths.length})`">
+        <List v-if="failedPaths.length > 0" :title="t('scanResults.couldntBeScanned', { count: failedPaths.length })">
           <FailedPathsTable :entries="failedPaths" />
         </List>
       </div>

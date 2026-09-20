@@ -22,7 +22,7 @@ defineEmits<{ (e: "click"): void }>();
     >
       <span
         v-if="active"
-        class="absolute top-1 bottom-1 left-0 w-[3px] bg-action-primary"
+        class="absolute top-1 bottom-1 start-0 w-[3px] bg-action-primary"
         aria-hidden="true"
       />
       <Icon :name="icon" :size="20" />

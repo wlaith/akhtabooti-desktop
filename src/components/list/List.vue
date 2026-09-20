@@ -3,7 +3,7 @@ defineProps<{ title?: string }>();
 </script>
 
 <template>
-  <div class="w-full text-left">
+  <div class="w-full">
     <div
       v-if="title"
       class="flex items-center gap-2 border-b border-text-primary/12 bg-neutral-bg px-4 py-[15px]"

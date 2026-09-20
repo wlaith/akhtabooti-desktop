@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { computed, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import { useStepper } from "./composables/useStepper";
 import { useScan } from "./composables/useScan";
 import Stepper from "./components/Stepper.vue";
@@ -11,8 +12,13 @@ import Sidebar from "./components/sidebar/Sidebar.vue";
 import GuideView from "./components/guide/GuideView.vue";
 import AboutDialog from "./components/about/AboutDialog.vue";
 
-const steps = [{ label: "Configure" }, { label: "Scan" }, { label: "Results" }];
-const stepper = useStepper(steps);
+const { t } = useI18n();
+const stepLabels = computed(() => [
+  { label: t("app.steps.configure") },
+  { label: t("app.steps.scan") },
+  { label: t("app.steps.results") },
+]);
+const stepper = useStepper([{ label: "" }, { label: "" }, { label: "" }]);
 const { currentIndex } = stepper;
 const { results, pathStatus, pathErrors, scanning, allFailed, hasScanned, scan, cancelScan, reset } =
   useScan();
@@ -63,7 +69,7 @@ function handleStepSelect(index: number) {
       <div v-else class="p-8">
         <Stepper
           class="mb-6 w-full max-w-[1440px]"
-          :steps="steps"
+          :steps="stepLabels"
           :state-of="stepper.stateOf"
           :current-index="currentIndex"
           @select="handleStepSelect"
