@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
+import { useI18n } from "vue-i18n";
 import type { StepState } from "../composables/useStepper";
 import iconStepCompleted from "../assets/icons/step-completed.svg?raw";
 import iconStepActive from "../assets/icons/step-active.svg?raw";
@@ -15,18 +16,19 @@ const emit = defineEmits<{
   (e: "select"): void;
 }>();
 
+const { t } = useI18n();
 const clickable = computed(() => props.state === "completed");
 
 const statusLabel = computed(() => {
   switch (props.state) {
     case "completed":
-      return "Completed";
+      return t("stepper.statusCompleted");
     case "active":
-      return "Current step";
+      return t("stepper.statusCurrent");
     case "disabled":
-      return "Disabled";
+      return t("stepper.statusDisabled");
     default:
-      return "Upcoming";
+      return t("stepper.statusUpcoming");
   }
 });
 
@@ -63,7 +65,7 @@ const headerAttrs = computed(() => {
 
 <template>
   <div
-    class="flex flex-1 flex-col items-start gap-1 border-t-2 pt-2.5 pr-4 transition-colors duration-300"
+    class="flex flex-1 flex-col items-start gap-1 border-t-2 pt-2.5 pe-4 transition-colors duration-300"
     :class="borderClass"
     role="listitem"
   >
@@ -84,7 +86,7 @@ const headerAttrs = computed(() => {
     </component>
     <p
       v-if="description"
-      class="pl-6 text-xs text-text-primary/60"
+      class="ps-6 text-xs text-text-primary/60"
     >
       {{ description }}
     </p>
