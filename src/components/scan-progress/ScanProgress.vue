@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import type { PathStatus } from "../../composables/useScan";
 import List from "../list/List.vue";
 import ListItem from "../list/ListItem.vue";
@@ -10,6 +11,7 @@ import Button from "../button/Button.vue";
 const props = defineProps<{ pathStatus: Record<string, PathStatus> }>();
 const emit = defineEmits<{ cancel: [] }>();
 
+const { t } = useI18n();
 const paths = computed(() => Object.keys(props.pathStatus));
 
 const elapsedSeconds = ref(0);
@@ -28,19 +30,19 @@ const elapsedLabel = computed(() => {
 </script>
 
 <template>
-  <section class="w-full text-left">
+  <section class="w-full">
     <div class="mb-6 flex items-center justify-between">
-      <h2 class="text-[28px] font-semibold text-text-primary">Scanning your files…</h2>
+      <h2 class="text-[28px] font-semibold text-text-primary">{{ t("scanProgress.title") }}</h2>
       <div class="flex items-center gap-4">
-        <p class="text-[14px] text-text-secondary">Elapsed: {{ elapsedLabel }}</p>
-        <Button variant="secondary" size="medium" @click="emit('cancel')">Cancel scan</Button>
+        <p class="text-[14px] text-text-secondary">{{ t("scanProgress.elapsed", { time: elapsedLabel }) }}</p>
+        <Button variant="secondary" size="medium" @click="emit('cancel')">{{ t("scanProgress.cancelScan") }}</Button>
       </div>
     </div>
 
-    <List title="Paths currently being scanned">
+    <List :title="t('scanProgress.pathsTitle')">
       <ListItem v-for="path in paths" :key="path">
         <template #icon><Icon name="folder" /></template>
-        <span class="break-all">{{ path }}</span>
+        <span dir="ltr" class="break-all">{{ path }}</span>
         <template #actions>
           <Spinner v-if="pathStatus[path] === 'pending'" />
           <Icon v-else-if="pathStatus[path] === 'error'" name="subtract-alt" class="text-error" />
