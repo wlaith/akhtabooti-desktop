@@ -1,7 +1,9 @@
 <script setup lang="ts">
+import { useI18n } from "vue-i18n";
 import Icon from "../icon/Icon.vue";
 
 defineEmits<{ (e: "close"): void }>();
+const { t } = useI18n();
 </script>
 
 <template>
@@ -16,14 +18,14 @@ defineEmits<{ (e: "close"): void }>();
         <div class="flex items-center gap-3">
           <img src="/logo.png" alt="" class="h-8 w-8 object-contain" />
           <div>
-            <h2 id="about-title" class="text-[18px] font-semibold text-text-primary">Akhtabooti</h2>
-            <p class="text-[13px] text-text-secondary">Version 0.1.0 (placeholder)</p>
+            <h2 id="about-title" class="text-[18px] font-semibold text-text-primary">{{ t("aboutDialog.title") }}</h2>
+            <p class="text-[13px] text-text-secondary">{{ t("aboutDialog.version") }}</p>
           </div>
         </div>
         <button
           type="button"
           class="text-text-secondary outline-none hover:text-text-primary"
-          aria-label="Close"
+          :aria-label="t('aboutDialog.close')"
           @click="$emit('close')"
         >
           <Icon name="close" :size="16" />
@@ -31,17 +33,15 @@ defineEmits<{ (e: "close"): void }>();
       </div>
 
       <p class="mb-4 text-[14px] leading-[20px] text-text-primary">
-        Placeholder description: Akhtabooti scans local files and folders for personally
-        identifiable information (PII) such as email addresses and phone numbers.
+        {{ t("aboutDialog.description") }}
       </p>
 
       <p class="mb-4 flex items-start gap-2 rounded bg-neutral-bg p-3 text-[13px] leading-[18px] text-text-primary">
-        🔒 Placeholder privacy statement: All scanning happens locally on this device.
-        No file contents or findings ever leave this machine.
+        {{ t("aboutDialog.privacy") }}
       </p>
 
       <p class="text-[12px] text-text-secondary">
-        Placeholder licence · © 2026 · <a href="#" class="text-action-primary underline">Report an issue</a>
+        {{ t("aboutDialog.licence") }} <a href="#" class="text-action-primary underline">{{ t("aboutDialog.reportIssue") }}</a>
       </p>
     </div>
   </div>
