@@ -43,10 +43,6 @@ Files that cannot be read are reported separately rather than silently skipped.
 Builds for macOS, Linux (`.deb` / `.rpm`) and Windows (`.msi` / `.exe`) are published
 on the [releases page](https://github.com/wlaith/akhtabooti-desktop/releases).
 
-> **macOS:** code signing and notarisation are still being set up. Until that work
-> lands, macOS builds are not signed with a Developer ID and will be blocked by
-> Gatekeeper. If you need to run Akhtabooti on macOS today, build it from source.
-
 ## Building from source
 
 Requirements:
