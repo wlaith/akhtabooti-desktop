@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useI18n } from "vue-i18n";
 import Tooltip from "../tooltip/Tooltip.vue";
 import Icon from "../icon/Icon.vue";
 
@@ -7,21 +8,23 @@ defineEmits<{
   (e: "export"): void;
   (e: "cancel"): void;
 }>();
+
+const { t } = useI18n();
 </script>
 
 <template>
   <div class="sticky top-0 z-10 flex flex-wrap items-center gap-y-1 bg-action-primary text-text-inverse">
     <span class="flex-1 px-4 py-[15px] text-[14px] leading-[18px] tracking-[0.16px]">
-      {{ count }} selected
+      {{ t("batchActionBar.selected", { count }) }}
     </span>
     <div class="flex flex-wrap items-center">
-      <Tooltip wrap text="Download the selected files' findings as a report">
+      <Tooltip wrap :text="t('batchActionBar.exportTooltip')">
         <button
           type="button"
           class="flex cursor-pointer items-center gap-1 px-4 py-[15px] text-[14px] leading-[18px] tracking-[0.16px] hover:bg-text-inverse/10"
           @click="$emit('export')"
         >
-          Export
+          {{ t("batchActionBar.export") }}
           <Icon name="information" :size="12" />
         </button>
       </Tooltip>
@@ -31,7 +34,7 @@ defineEmits<{
         class="cursor-pointer px-4 py-[15px] text-[14px] leading-[18px] tracking-[0.16px] hover:bg-text-inverse/10"
         @click="$emit('cancel')"
       >
-        Cancel
+        {{ t("batchActionBar.cancel") }}
       </button>
     </div>
   </div>
