@@ -1,0 +1,148 @@
+{
+  "app": {
+    "steps": { "configure": "Configure", "scan": "Scan", "results": "Results" }
+  },
+  "stepper": {
+    "stepOfTotal": "Step {current} of {total}",
+    "statusCompleted": "Completed",
+    "statusCurrent": "Current step",
+    "statusDisabled": "Disabled",
+    "statusUpcoming": "Upcoming"
+  },
+  "sidebar": {
+    "primaryNav": "Primary",
+    "scan": "Scan",
+    "switchToLightMode": "Switch to light mode",
+    "switchToDarkMode": "Switch to dark mode",
+    "switchToEnglish": "Switch to English",
+    "switchToArabic": "Switch to Arabic",
+    "guide": "How to use",
+    "about": "About"
+  },
+  "tooltip": { "moreInfo": "More information" },
+  "spinner": { "scanning": "Scanning" },
+  "statTile": { "applyFilter": "Apply filter", "removeFilter": "Remove filter" },
+  "configureScan": {
+    "title": "Configure Your Scan",
+    "pathsTitle": "Paths to be scanned",
+    "pathsTooltip": "Files and folders listed here will be scanned for personal information.",
+    "removePath": "Remove path",
+    "chooseFolder": "Choose folder path to scan",
+    "chooseFile": "or choose a specific file",
+    "startScan": "Start scan"
+  },
+  "scanProgress": {
+    "title": "Scanning your files…",
+    "elapsed": "Elapsed: {time}",
+    "cancelScan": "Cancel scan",
+    "pathsTitle": "Paths currently being scanned"
+  },
+  "scanResults": {
+    "title": "Scan Report",
+    "rescan": "Re-scan",
+    "exportReport": "Export report",
+    "statPathsScanned": "Paths scanned",
+    "statFilesWithFindings": "Files with findings",
+    "statEmailsFound": "Emails found",
+    "statPhoneNumbersFound": "Phone numbers found",
+    "noFilesFound": "No files found.",
+    "status": "Status",
+    "statusAllTooltip": "Show every scanned file",
+    "statusAll": "All ({count})",
+    "statusHasFindingsTooltip": "Show only files where PII was detected",
+    "statusHasFindings": "Has findings ({count})",
+    "statusNoFindingsTooltip": "Show only files with no PII detected",
+    "statusNoFindings": "No findings ({count})",
+    "category": "Category",
+    "categoryEmailTooltip": "Show files containing email addresses",
+    "categoryEmail": "Email · no files | Email · 1 file | Email · {count} files",
+    "categoryPhoneTooltip": "Show files containing phone numbers",
+    "categoryPhone": "Phone numbers · no files | Phone numbers · 1 file | Phone numbers · {count} files",
+    "categoryOtherTooltip": "Show files containing other detected PII",
+    "categoryOther": "Other · no files | Other · 1 file | Other · {count} files",
+    "searchPlaceholder": "Search by file path",
+    "sortMost": "Most findings",
+    "sortFewest": "Fewest findings",
+    "sortAz": "A-Z",
+    "sortZa": "Z-A",
+    "findings": "Findings",
+    "noFilesMatch": "No files match these filters.",
+    "couldntBeScanned": "Couldn't be scanned ({count})"
+  },
+  "batchActionBar": {
+    "selected": "None selected | 1 selected | {count} selected",
+    "exportTooltip": "Download the selected files' findings as a report",
+    "export": "Export",
+    "cancel": "Cancel"
+  },
+  "findingsTable": {
+    "filePath": "File path",
+    "findings": "Findings",
+    "status": "Status",
+    "collapseRow": "Collapse row",
+    "expandRow": "Expand row",
+    "findingsCount": "No findings | 1 finding | {count} findings",
+    "noFindings": "No findings",
+    "scanning": "Scanning…",
+    "reviewed": "Reviewed",
+    "confirmedValues": "Confirmed values",
+    "confirmedValuesTooltip": "Literal values found in this file and matched with high confidence",
+    "detectedCategories": "Detected categories",
+    "detectedCategoriesTooltip": "Categories inferred from keywords in this file; review before treating as confirmed",
+    "email": "Email",
+    "phoneNumber": "Phone number",
+    "hideValue": "Hide {label}",
+    "revealValue": "Reveal {label}",
+    "copyValue": "Copy {label}",
+    "noConfirmedValues": "No confirmed values or categories detected in this file"
+  },
+  "failedPathsTable": {
+    "path": "Path",
+    "reason": "Reason",
+    "viewError": "View error"
+  },
+  "errorState": {
+    "title": "Scan couldn't complete",
+    "description": "None of the selected files or folders could be read.",
+    "tryAgain": "Try again"
+  },
+  "errorDetailDialog": {
+    "title": "Scan error",
+    "close": "Close",
+    "path": "Path",
+    "reason": "Reason",
+    "copyError": "Copy error",
+    "copied": "Copied"
+  },
+  "guideView": {
+    "title": "How to use Akhtabooti",
+    "close": "Back to scan",
+    "sections": [
+      {
+        "title": "1. Choose what to scan",
+        "body": "Placeholder copy: Add one or more files or folders to the scan list. You can mix files and folders in the same scan."
+      },
+      {
+        "title": "2. Run the scan",
+        "body": "Placeholder copy: Start the scan and watch progress per path. Scanning happens entirely on this device, nothing is uploaded."
+      },
+      {
+        "title": "3. Review findings",
+        "body": "Placeholder copy: Filter by status or category, search by file path, and select files to export a report of what was found."
+      },
+      {
+        "title": "4. Export a report",
+        "body": "Placeholder copy: Export selected (or all) results as a JSON report you can share with your team or archive."
+      }
+    ]
+  },
+  "aboutDialog": {
+    "title": "Akhtabooti",
+    "version": "Version 0.1.0 (placeholder)",
+    "close": "Close",
+    "description": "Placeholder description: Akhtabooti scans local files and folders for personally identifiable information (PII) such as email addresses and phone numbers.",
+    "privacy": "🔒 Placeholder privacy statement: All scanning happens locally on this device. No file contents or findings ever leave this machine.",
+    "licence": "Placeholder licence · © 2026 ·",
+    "reportIssue": "Report an issue"
+  }
+}
