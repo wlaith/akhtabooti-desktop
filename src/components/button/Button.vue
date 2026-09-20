@@ -12,7 +12,7 @@ withDefaults(
     :class="[
       size === 'small'
         ? ['gap-1', 'px-2.5 py-1 text-[12px] leading-[16px]']
-        : ['pl-4', $slots.icon ? 'pr-16' : 'pr-4', 'text-[14px] leading-[18px] tracking-[0.16px]', size === 'medium' ? 'py-[11px]' : 'py-[15px]'],
+        : ['ps-4', $slots.icon ? 'pe-16' : 'pe-4', 'text-[14px] leading-[18px] tracking-[0.16px]', size === 'medium' ? 'py-[11px]' : 'py-[15px]'],
       variant === 'primary'
         ? 'bg-action-primary text-text-inverse hover:bg-action-primary-hover active:bg-action-primary-hover'
         : variant === 'secondary'
@@ -22,7 +22,7 @@ withDefaults(
   >
     <slot v-if="$slots.icon && size === 'small'" name="icon" />
     <slot />
-    <span v-if="$slots.icon && size !== 'small'" class="absolute top-1/2 right-4 -translate-y-1/2">
+    <span v-if="$slots.icon && size !== 'small'" class="absolute top-1/2 end-4 -translate-y-1/2">
       <slot name="icon" />
     </span>
   </button>

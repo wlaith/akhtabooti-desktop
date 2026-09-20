@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { ref } from "vue";
+import { useI18n } from "vue-i18n";
 
 withDefaults(defineProps<{ text: string; wrap?: boolean; placement?: "top" | "right" }>(), {
   wrap: false,
   placement: "top",
 });
+const { t } = useI18n();
 const open = ref(false);
 </script>
 
@@ -24,7 +26,7 @@ const open = ref(false);
       type="button"
       class="flex cursor-pointer items-center text-text-secondary outline-none hover:text-text-primary"
       :aria-expanded="open"
-      aria-label="More information"
+      :aria-label="t('tooltip.moreInfo')"
       @click="open = !open"
     >
       <slot />
@@ -32,10 +34,10 @@ const open = ref(false);
     <span
       v-if="open"
       role="tooltip"
-      class="absolute z-20 w-max max-w-[288px] text-left text-[12px] leading-[16px] text-text-inverse bg-text-primary rounded px-3 py-2 shadow-lg"
+      class="absolute z-20 w-max max-w-[288px] text-[12px] leading-[16px] text-text-inverse bg-text-primary rounded px-3 py-2 shadow-lg"
       :class="
         placement === 'right'
-          ? 'top-1/2 left-full ml-2 -translate-y-1/2'
+          ? 'top-1/2 start-full ms-2 -translate-y-1/2'
           : 'bottom-full left-1/2 mb-2 -translate-x-1/2'
       "
     >

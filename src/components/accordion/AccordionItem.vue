@@ -14,7 +14,7 @@ const open = ref(false);
     <button
       type="button"
       :disabled="disabled"
-      class="flex w-full items-center gap-4 px-4 py-[14px] text-left outline-none disabled:cursor-not-allowed"
+      class="flex w-full items-center gap-4 px-4 py-[14px] outline-none disabled:cursor-not-allowed"
       :class="disabled ? 'text-text-primary/25' : 'text-text-primary hover:bg-text-primary/8'"
       :aria-expanded="open"
       @click="open = !open"
@@ -24,7 +24,7 @@ const open = ref(false);
     </button>
     <div
       v-if="open && !disabled"
-      class="flex flex-col gap-4 pt-2 pr-12 pb-6 pl-4 text-[14px] leading-[20px] tracking-[0.16px] text-text-primary"
+      class="flex flex-col gap-4 pt-2 pe-12 pb-6 ps-4 text-[14px] leading-[20px] tracking-[0.16px] text-text-primary"
     >
       <slot />
     </div>
