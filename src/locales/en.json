@@ -120,29 +120,29 @@
     "sections": [
       {
         "title": "1. Choose what to scan",
-        "body": "Placeholder copy: Add one or more files or folders to the scan list. You can mix files and folders in the same scan."
+        "body": "Add one or more files or folders to the scan list. You can mix files and folders in the same scan, and remove anything you added by mistake before you start."
       },
       {
         "title": "2. Run the scan",
-        "body": "Placeholder copy: Start the scan and watch progress per path. Scanning happens entirely on this device, nothing is uploaded."
+        "body": "Start the scan and watch progress for each path. Scanning happens entirely on this device, nothing is uploaded. You can cancel at any point without leaving anything behind."
       },
       {
         "title": "3. Review findings",
-        "body": "Placeholder copy: Filter by status or category, search by file path, and select files to export a report of what was found."
+        "body": "Filter by category, search by file path, and open a file to see which identifiers were found in it. Paths that could not be read are listed separately so nothing is silently skipped."
       },
       {
         "title": "4. Export a report",
-        "body": "Placeholder copy: Export selected (or all) results as a JSON report you can share with your team or archive."
+        "body": "Export the selected findings, or all of them, as a JSON report you can share with your team or keep for your records. You choose where it is saved."
       }
     ]
   },
   "aboutDialog": {
     "title": "Akhtabooti",
-    "version": "Version 0.1.0 (placeholder)",
+    "version": "Version {version}",
     "close": "Close",
-    "description": "Placeholder description: Akhtabooti scans local files and folders for personally identifiable information (PII) such as email addresses and phone numbers.",
-    "privacy": "🔒 Placeholder privacy statement: All scanning happens locally on this device. No file contents or findings ever leave this machine.",
-    "licence": "Placeholder licence · © 2026 ·",
+    "description": "Akhtabooti scans local files and folders for personally identifiable information such as email addresses and phone numbers, so you know what personal data you are holding before you share or archive it.",
+    "privacy": "🔒 All scanning happens on this device. Akhtabooti makes no network requests. No file contents or findings ever leave this machine.",
+    "licence": "Apache-2.0 · © 2026 JOSA ·",
     "reportIssue": "Report an issue"
   }
 }

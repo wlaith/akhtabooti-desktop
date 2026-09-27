@@ -2,7 +2,6 @@
 import { computed, reactive, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { invoke } from "@tauri-apps/api/core";
-import { save } from "@tauri-apps/plugin-dialog";
 import type { FilePIIs } from "../../composables/useScan";
 import List from "../list/List.vue";
 import StatTile from "../stat-tile/StatTile.vue";
@@ -27,9 +26,7 @@ const failedPaths = computed(() => Object.entries(props.pathErrors));
 
 function hasFindings(file: FilePIIs) {
   return (
-    file.email_accounts.length > 0 ||
-    file.phone_numbers.length > 0 ||
-    file.other_piis.length > 0
+    file.email_accounts.length > 0 || file.phone_numbers.length > 0 || file.other_piis.length > 0
   );
 }
 
@@ -41,13 +38,17 @@ const totalEmails = computed(() =>
 const totalPhones = computed(() =>
   visibleResults.value.reduce((sum, f) => sum + f.phone_numbers.length, 0),
 );
-const totalOther = computed(() =>
-  visibleResults.value.filter((f) => f.other_piis.length > 0).length,
+const totalOther = computed(
+  () => visibleResults.value.filter((f) => f.other_piis.length > 0).length,
 );
 const filesWithFindings = computed(() => visibleResults.value.filter(hasFindings));
 const filesWithNoFindings = computed(() => visibleResults.value.filter((f) => !hasFindings(f)));
-const filesWithEmail = computed(() => visibleResults.value.filter((f) => f.email_accounts.length > 0));
-const filesWithPhone = computed(() => visibleResults.value.filter((f) => f.phone_numbers.length > 0));
+const filesWithEmail = computed(() =>
+  visibleResults.value.filter((f) => f.email_accounts.length > 0),
+);
+const filesWithPhone = computed(() =>
+  visibleResults.value.filter((f) => f.phone_numbers.length > 0),
+);
 
 // --- Filters ---
 type StatusFilter = "all" | "has-findings" | "no-findings";
@@ -125,15 +126,12 @@ function clearSelection() {
 }
 
 async function exportSelected() {
-  const target = selected.size > 0 ? visibleResults.value.filter((f) => selected.has(f.filename)) : visibleResults.value;
+  const target =
+    selected.size > 0
+      ? visibleResults.value.filter((f) => selected.has(f.filename))
+      : visibleResults.value;
 
-  const path = await save({
-    defaultPath: "scan-report.json",
-    filters: [{ name: "JSON", extensions: ["json"] }],
-  });
-  if (!path) return;
-
-  await invoke("write_file", { path, contents: JSON.stringify(target, null, 2) });
+  await invoke<boolean>("export_report", { contents: JSON.stringify(target, null, 2) });
 }
 </script>
 

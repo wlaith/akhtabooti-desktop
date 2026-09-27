@@ -30,9 +30,17 @@ defineEmits<{ (e: "update:modelValue", value: boolean): void }>();
         fill="none"
         aria-hidden="true"
       >
-        <path d="M3 8.5L6.5 12L13 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter" />
+        <path
+          d="M3 8.5L6.5 12L13 4.5"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="square"
+          stroke-linejoin="miter"
+        />
       </svg>
     </span>
-    <span v-if="label || $slots.default"><slot>{{ label }}</slot></span>
+    <span v-if="label || $slots.default"
+      ><slot>{{ label }}</slot></span
+    >
   </label>
 </template>

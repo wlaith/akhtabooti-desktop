@@ -25,7 +25,15 @@ const revealedValues = reactive(new Set<string>());
 const copiedValue = ref<string | null>(null);
 const GRID_COLS = "grid-cols-[40px_24px_minmax(0,1fr)_120px_130px] gap-3";
 
-const FILE_ICONS: Record<string, "document-pdf" | "document-doc" | "document-xls" | "document-html" | "document-json" | "document-txt"> = {
+const FILE_ICONS: Record<
+  string,
+  | "document-pdf"
+  | "document-doc"
+  | "document-xls"
+  | "document-html"
+  | "document-json"
+  | "document-txt"
+> = {
   pdf: "document-pdf",
   doc: "document-doc",
   docx: "document-doc",
@@ -53,9 +61,7 @@ function isScanning(filename: string) {
 
 function hasFindings(file: FilePIIs) {
   return (
-    file.email_accounts.length > 0 ||
-    file.phone_numbers.length > 0 ||
-    file.other_piis.length > 0
+    file.email_accounts.length > 0 || file.phone_numbers.length > 0 || file.other_piis.length > 0
   );
 }
 
@@ -139,7 +145,9 @@ const allSelected = () =>
         <span class="py-3 pr-2 pl-1 text-[14px] leading-[18px] tracking-[0.16px] text-text-primary">
           {{ isScanning(file.filename) ? "—" : hasFindings(file) ? t("findingsTable.findingsCount", { count: findingCount(file) }) : t("findingsTable.noFindings") }}
         </span>
-        <span class="flex items-center gap-2 py-3 pr-2 pl-1 text-[14px] leading-[18px] tracking-[0.16px]">
+        <span
+          class="flex items-center gap-2 py-3 pr-2 pl-1 text-[14px] leading-[18px] tracking-[0.16px]"
+        >
           <Icon
             :name="isScanning(file.filename) ? 'hourglass' : 'checkmark-outline'"
             :class="isScanning(file.filename) ? 'text-text-tertiary' : 'text-success'"
@@ -196,7 +204,10 @@ const allSelected = () =>
             </ul>
           </div>
 
-          <div v-if="file.other_piis.length" :class="confirmedValues(file).length ? 'min-w-0' : 'col-span-3 min-w-0'">
+          <div
+            v-if="file.other_piis.length"
+            :class="confirmedValues(file).length ? 'min-w-0' : 'col-span-3 min-w-0'"
+          >
             <div class="flex items-center gap-2 py-[15px]">
               <span class="text-[14px] leading-[18px] font-semibold tracking-[0.16px] text-text-primary">
                 {{ t("findingsTable.detectedCategories") }}

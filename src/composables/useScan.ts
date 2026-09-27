@@ -88,9 +88,7 @@ export function useScan() {
 
   function hasFindings(file: FilePIIs) {
     return (
-      file.email_accounts.length > 0 ||
-      file.phone_numbers.length > 0 ||
-      file.other_piis.length > 0
+      file.email_accounts.length > 0 || file.phone_numbers.length > 0 || file.other_piis.length > 0
     );
   }
 

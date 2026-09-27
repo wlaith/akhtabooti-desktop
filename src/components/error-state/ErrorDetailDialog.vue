@@ -18,7 +18,10 @@ async function copy() {
 </script>
 
 <template>
-  <div class="fixed inset-0 z-30 flex items-center justify-center bg-black/40" @click.self="$emit('close')">
+  <div
+    class="fixed inset-0 z-30 flex items-center justify-center bg-black/40"
+    @click.self="$emit('close')"
+  >
     <div
       class="w-full max-w-[480px] bg-surface p-6 shadow-xl"
       role="dialog"
