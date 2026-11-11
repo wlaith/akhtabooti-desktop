@@ -1,18 +1,32 @@
 version: 2
-updates:
+pdates:
   - package-ecosystem: npm
     directory: /
     schedule:
       interval: weekly
     open-pull-requests-limit: 5
+    groups:
+      npm-minor-patch:
+        update-types: [minor, patch]
 
   - package-ecosystem: cargo
     directory: /src-tauri
     schedule:
       interval: weekly
     open-pull-requests-limit: 5
+    groups:
+      tauri:
+        patterns: ["tauri*"]
+      cargo-minor-patch:
+        patterns: ["*"]
+        # Core bumps change scanning behaviour; keep them reviewable alone.
+        exclude-patterns: ["akhtabooti-core"]
+        update-types: [minor, patch]
 
   - package-ecosystem: github-actions
     directory: /
     schedule:
       interval: weekly
+    groups:
+      actions:
+        patterns: ["*"]
