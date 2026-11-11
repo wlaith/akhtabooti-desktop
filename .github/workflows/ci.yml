@@ -40,5 +40,5 @@ jobs:
       - uses: Swatinem/rust-cache@v2
         with:
           workspaces: src-tauri
-           save-if: ${{ github.event_name != 'pull_request' }}
+          save-if: ${{ github.event_name != 'pull_request' }}
       - run: cargo check --locked --manifest-path src-tauri/Cargo.toml
