@@ -57,7 +57,7 @@ dependencies = [
 
 [[package]]
 name = "akhtabooti"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "akhtabooti-core",
  "serde",
