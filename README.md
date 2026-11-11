@@ -67,7 +67,7 @@ npm run tauri build    # produce an installable bundle
 ```
 
 The first build takes a while. Akhtabooti depends on
-[`akhtabooti-core`](https://github.com/wlaith/akhtabooti-core), which compiles a
+[`akhtabooti-core`](https://crates.io/crates/akhtabooti-core), which compiles a
 native Apache Tika library through GraalVM. This is a large, one-time cost that
 subsequent builds reuse.
 

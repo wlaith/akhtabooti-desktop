@@ -51,7 +51,7 @@ In scope:
 
 - The Akhtabooti desktop application in this repository
 - Its build and release pipeline
-- [`akhtabooti-core`](https://github.com/wlaith/akhtabooti-core), the scanning engine
+- [`akhtabooti-core`](https://crates.io/crates/akhtabooti-core), the scanning engine
 
 Out of scope:
 
