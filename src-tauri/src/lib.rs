@@ -1,5 +1,6 @@
 use akhtabooti_core::{search_directory, search_file, FilePIIs};
 use std::path::Path;
+use tauri::Manager;
 use tauri_plugin_dialog::DialogExt;
 
 #[tauri::command]
@@ -43,6 +44,12 @@ pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_dialog::init())
+        .setup(|app| {
+            // akhtabooti-core loads its OCR models from this folder.
+            let models_dir = app.path().resource_dir()?.join("models");
+            std::env::set_var("AKHTABOOTI_MODELS_DIR", models_dir);
+            Ok(())
+        })
         .invoke_handler(tauri::generate_handler![scan_path, export_report])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
