@@ -11,8 +11,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Apache-2.0 licence, security policy and threat model documentation.
 - SHA256 checksums and build provenance attestation for release artifacts.
+- Scanned PDFs are now read with OCR.
 
 ### Changed
+
+- The scanning engine now comes from crates.io (`akhtabooti-core` 0.1.2), and
+  the OCR models ship with the app.
+- Image OCR uses the English model instead of the Arabic one.
 
 - Releases are now cut from `v*` tags rather than a branch.
 - CI runs on the branches actually used for development.
