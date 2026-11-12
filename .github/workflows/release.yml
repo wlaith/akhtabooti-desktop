@@ -16,8 +16,10 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - platform: macos-latest
-            args: -- --locked
+          # macOS disabled until the APPLE_* signing secrets are configured.
+          # Uncomment to re-enable; the macOS-only steps below are gated on it.
+          # - platform: macos-latest
+          #   args: -- --locked
           - platform: ubuntu-22.04
             args: --bundles deb,rpm -- --locked
           - platform: windows-latest
