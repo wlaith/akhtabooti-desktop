@@ -1,6 +1,6 @@
 {
   "name": "akhtabooti",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "private": true,
   "description": "Desktop application that scans local files and folders for personally identifiable information, entirely offline.",
   "license": "Apache-2.0",

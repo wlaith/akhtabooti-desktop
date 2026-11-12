@@ -1,6 +1,6 @@
 [package]
 name = "akhtabooti"
-version = "0.1.1"
+version = "0.1.2"
 description = "Scans local files and folders for personally identifiable information, entirely offline."
 authors = ["Jordan Open Source Association (JOSA)"]
 edition = "2021"
