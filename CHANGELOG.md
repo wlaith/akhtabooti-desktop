@@ -15,9 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- The scanning engine now comes from crates.io (`akhtabooti-core` 0.1.2), and
+- The scanning engine now comes from crates.io (`akhtabooti-core` 0.1.3), and
   the OCR models ship with the app.
-- Image OCR uses the English model instead of the Arabic one.
+- OCR now uses the PP-OCRv6 medium detection model and recognizes both Arabic
+  and English text, choosing the Arabic or English model per text region.
 
 - Releases are now cut from `v*` tags rather than a branch.
 - CI runs on the branches actually used for development.

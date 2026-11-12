@@ -21,7 +21,9 @@ crate-type = ["staticlib", "cdylib", "rlib"]
 [workspace]
 
 [workspace.dependencies]
-akhtabooti-core = "0.1.2"
+# Pinned exactly: each core release expects a specific set of OCR model files
+# in resources/models, so bump both together.
+akhtabooti-core = "=0.1.3"
 
 [build-dependencies]
 tauri-build = { version = "2", features = [] }
