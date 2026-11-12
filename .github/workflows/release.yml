@@ -23,7 +23,14 @@ jobs:
           - platform: windows-latest
             args: -- --locked
     runs-on: ${{ matrix.platform }}
-    timeout-minutes: 60
+    # The GraalVM native-image build of extractous's tika-native takes
+    # 30+ minutes on the 3-core / 7 GB macos-latest runner.
+    timeout-minutes: ${{ matrix.platform == 'macos-latest' && 120 || 60 }}
+    env:
+      # extractous's build script inherits this env into native-image. Its
+      # deadlock watchdog (10 min of no progress) killed the build on the slow
+      # macOS runner while it was still working; the job timeout is the backstop.
+      NATIVE_IMAGE_OPTIONS: -H:DeadlockWatchdogInterval=0
     steps:
       - uses: actions/checkout@v7
 
@@ -43,6 +50,13 @@ jobs:
           sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf xdg-utils
 
       - run: npm ci
+
+      # Build extractous (and its ~5 GB native-image JVM) on its own first.
+      # Inside the full tauri build it competes with parallel rustc jobs for
+      # 7 GB of RAM, swaps, and stalls. The tauri build then reuses the output.
+      - if: matrix.platform == 'macos-latest'
+        working-directory: src-tauri
+        run: cargo build --release --locked -p extractous
 
       - uses: tauri-apps/tauri-action@v1
         env:
