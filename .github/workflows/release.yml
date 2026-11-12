@@ -33,6 +33,29 @@ jobs:
       NATIVE_IMAGE_OPTIONS: -H:DeadlockWatchdogInterval=0
     steps:
       - uses: actions/checkout@v7
+      - name: Check Apple signing secrets
+        if: matrix.platform == 'macos-latest'
+        shell: bash
+        env:
+          APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
+          APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
+          APPLE_SIGNING_IDENTITY: ${{ secrets.APPLE_SIGNING_IDENTITY }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+        run: |
+          missing=()
+          for name in APPLE_CERTIFICATE APPLE_CERTIFICATE_PASSWORD APPLE_SIGNING_IDENTITY \
+                      APPLE_ID APPLE_PASSWORD APPLE_TEAM_ID; do
+            [ -n "${!name}" ] || missing+=("$name")
+          done
+          if [ ${#missing[@]} -gt 0 ]; then
+            for name in "${missing[@]}"; do
+              echo "::error title=Missing secret::$name is not set; the macOS bundle cannot be signed and notarized."
+            done
+            exit 1
+          fi
+          echo "All Apple signing secrets are set."
 
       - uses: actions/setup-node@v7
         with:
@@ -61,10 +84,6 @@ jobs:
       - uses: tauri-apps/tauri-action@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # Without these the bundle falls back to the ad-hoc identity in
-          # tauri.conf.json, which Gatekeeper rejects on other machines.
-          # Notarization needs the APPLE_ID/APPLE_PASSWORD/APPLE_TEAM_ID trio;
-          # the bundler skips it with a warning when they are absent.
           APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
           APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
           APPLE_SIGNING_IDENTITY: ${{ secrets.APPLE_SIGNING_IDENTITY }}
